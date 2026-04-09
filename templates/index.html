@@ -1,3 +1,154 @@
+<<<<<<< HEAD
+<style>
+  .hero {
+    background: linear-gradient(135deg, #1a3c5e 0%, #2d6a9f 100%);
+    color: #fff;
+    border-radius: 12px;
+    padding: 3rem 2.5rem;
+    margin-bottom: 2.5rem;
+    text-align: center;
+  }
+  .hero h1 { font-size: 2rem; margin-bottom: 0.75rem; }
+  .hero p  { font-size: 1.05rem; opacity: 0.85; }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 2.5rem;
+  }
+  .card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 1.5rem 1.25rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 6px 18px rgba(0,0,0,0.12); }
+  .card .icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+  .card h3    { font-size: 1rem; font-weight: 600; margin-bottom: 0.4rem; color: #1a3c5e; }
+  .card p     { font-size: 0.83rem; color: #666; }
+
+  .section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1a3c5e;
+    margin-bottom: 1rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 2px solid #e0e7ef;
+  }
+  .info-box {
+    background: #fff;
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    margin-bottom: 1.5rem;
+  }
+  .info-box p { font-size: 0.9rem; color: #444; margin-bottom: 0.4rem; }
+  .info-box .label { font-weight: 600; color: #1a3c5e; }
+  .badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+  .badge-applicant     { background: #d4edda; color: #155724; }
+  .badge-employer      { background: #fff3cd; color: #856404; }
+  .badge-administrator { background: #cce5ff; color: #004085; }
+</style>
+
+
+<!-- Hero banner -->
+<div class="hero">
+  <h1>Welcome back, {{ user.fullname }}!</h1>
+  <p>Career Opportunity System &mdash; connecting talent with opportunity.</p>
+</div>
+
+<!-- Account info -->
+<div class="info-box">
+  <p><span class="label">Email:</span> {{ user.email }}</p>
+  <p><span class="label">Role:</span>
+    <span class="badge badge-{{ user.role }}">{{ user.get_role_display }}</span>
+  </p>
+  <p><span class="label">Account Status:</span> {{ user.get_status_display }}</p>
+</div>
+
+<!-- Navigation cards -->
+<p class="section-title">Quick Navigation</p>
+<div class="card-grid">
+
+  {% if user.role == 'applicant' %}
+    <a class="card" href="#">
+      <div class="icon">&#128269;</div>
+      <h3>Browse Jobs</h3>
+      <p>Search and explore available job postings.</p>
+    </a>
+    <a class="card" href="#">
+      <div class="icon">&#128196;</div>
+      <h3>My Applications</h3>
+      <p>Track the status of your submitted applications.</p>
+    </a>
+    <a class="card" href="#">
+      <div class="icon">&#128278;</div>
+      <h3>Bookmarks</h3>
+      <p>View jobs you have saved for later.</p>
+    </a>
+    <a class="card" href="#">
+      <div class="icon">&#128100;</div>
+      <h3>My Profile</h3>
+      <p>Update your resume, skills, and references.</p>
+    </a>
+  {% endif %}
+
+  {% if user.role == 'employer' %}
+    <a class="card" href="#">
+      <div class="icon">&#128221;</div>
+      <h3>Post a Job</h3>
+      <p>Create a new job posting for your company.</p>
+    </a>
+    <a class="card" href="#">
+      <div class="icon">&#128101;</div>
+      <h3>Applications</h3>
+      <p>Review applicants for your open positions.</p>
+    </a>
+    <a class="card" href="#">
+      <div class="icon">&#127970;</div>
+      <h3>Company Profile</h3>
+      <p>Manage your company information.</p>
+    </a>
+  {% endif %}
+
+  {% if user.role == 'administrator' %}
+    <a class="card" href="/admin/">
+      <div class="icon">&#9881;</div>
+      <h3>Admin Panel</h3>
+      <p>Manage all users, jobs, and system settings.</p>
+    </a>
+    <a class="card" href="#">
+      <div class="icon">&#128101;</div>
+      <h3>Manage Users</h3>
+      <p>View and manage applicants and employers.</p>
+    </a>
+    <a class="card" href="#">
+      <div class="icon">&#128202;</div>
+      <h3>Audit Log</h3>
+      <p>Review all system activity and actions taken.</p>
+    </a>
+    <a class="card" href="#">
+      <div class="icon">&#128276;</div>
+      <h3>Notifications</h3>
+      <p>Send and manage system notifications.</p>
+    </a>
+  {% endif %}
+
+</div>
+{% endblock %}
+=======
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,3 +178,4 @@
     </div>
 </body>
 </html>
+>>>>>>> bdaa29c2a93fb9cb5de7be3f3fc1f9ad14b0b2ec
