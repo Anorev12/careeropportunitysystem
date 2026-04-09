@@ -1,10 +1,14 @@
+from django.contrib import admin
 from django.urls import path
-from . import views
+from django.contrib.auth import views as auth_views
+from accounts.views import index_view  # Make sure this import matches your app name
 
 urlpatterns = [
-    path('', views.application_list, name='application_list'),
-    path('<int:pk>/', views.application_detail, name='application_detail'),
-    path('create/', views.application_create, name='application_create'),
-    path('<int:pk>/update/', views.application_update, name='application_update'),
-    path('<int:pk>/delete/', views.application_delete, name='application_delete'),
+    path('admin/', admin.site.urls),
+
+    # This fixes the Index page (127.0.0.1:8080/)
+    path('', index_view, name='index'),
+
+    # This fixes the Login page (127.0.0.1:8080/login/)
+    path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
 ]

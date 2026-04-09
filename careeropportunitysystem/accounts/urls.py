@@ -1,4 +1,4 @@
-from django.urls import path
-urlpatterns = [
+from django.shortcuts import render
 
-]
+def index_view(request):
+    return render(request, 'index.html')
