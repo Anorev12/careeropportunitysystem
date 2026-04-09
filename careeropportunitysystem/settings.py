@@ -80,10 +80,17 @@ WSGI_APPLICATION = 'careeropportunitysystem.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
+<<<<<<< HEAD:careeropportunitysystem/settings.py
         'NAME': 'employer',
         'USER': 'root',
         'PASSWORD': '@Root123_',
         'HOST': 'localhost',
+=======
+        'NAME': 'dbcareeropportunitysystem',
+        'USER': 'root',
+        'PASSWORD': 'Abebea2004',
+        'HOST': '127.0.0.1',
+>>>>>>> bdaa29c2a93fb9cb5de7be3f3fc1f9ad14b0b2ec:careeropportunitysystem/careeropportunitysystem/settings.py
         'PORT': '3306',
     }
 }

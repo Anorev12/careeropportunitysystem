@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <style>
   .hero {
     background: linear-gradient(135deg, #1a3c5e 0%, #2d6a9f 100%);
@@ -147,3 +148,34 @@
 
 </div>
 {% endblock %}
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Career Opportunity System</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; margin: 40px; }
+        nav { background: #333; padding: 1rem; border-radius: 8px; }
+        nav a { color: white; margin-right: 20px; text-decoration: none; font-weight: bold; }
+        .container { margin-top: 20px; padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
+        .btn { display: inline-block; padding: 10px 20px; background: #007bff; color: white; border-radius: 5px; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="{% url 'index' %}">Home</a>
+        <a href="{% url 'login' %}">Login</a>
+    </nav>
+
+    <div class="container">
+        <h1>Welcome to the Career Opportunity System</h1>
+        <p>This is the main entry point for the project. Please select an option below:</p>
+
+        <div class="app-links">
+            <h3>Available Modules:</h3>
+            <a href="/applications/" class="btn">Manage Job Applications</a>
+        </div>
+    </div>
+</body>
+</html>
+>>>>>>> bdaa29c2a93fb9cb5de7be3f3fc1f9ad14b0b2ec
