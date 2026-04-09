@@ -79,10 +79,10 @@ WSGI_APPLICATION = 'careeropportunitysystem.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'employer',
         'USER': 'root',
-        'PASSWORD': '',
+        'PASSWORD': '@Root123_',
         'HOST': '127.0.0.1',
         'PORT': '3306',
     }
@@ -124,3 +124,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/employer/'
+LOGOUT_REDIRECT_URL = '/accounts/login/'
