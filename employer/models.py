@@ -14,9 +14,6 @@ class Employer(models.Model):
     def __str__(self):
         return self.company_name
 
-    class Meta:
-        db_table = 'employer_employer'
-
 
 class JobCategory(models.Model):
     name = models.CharField(max_length=100)
@@ -25,22 +22,13 @@ class JobCategory(models.Model):
     def __str__(self):
         return self.name
 
-    class Meta:
-        db_table = 'employer_jobcategory'
-
 
 class JobTitle(models.Model):
     title = models.CharField(max_length=200)
-    category = models.ForeignKey(
-        JobCategory,
-        on_delete=models.CASCADE
-    )
+    category = models.ForeignKey(JobCategory, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
-
-    class Meta:
-        db_table = 'employer_jobtitle'
 
 
 class JobPosting(models.Model):
@@ -49,7 +37,6 @@ class JobPosting(models.Model):
         ('closed', 'Closed'),
         ('draft', 'Draft'),
     ]
-
     JOB_TYPE_CHOICES = [
         ('full_time', 'Full Time'),
         ('part_time', 'Part Time'),
@@ -57,18 +44,9 @@ class JobPosting(models.Model):
         ('internship', 'Internship'),
     ]
 
-    employer = models.ForeignKey(
-        Employer,
-        on_delete=models.CASCADE
-    )
-    job_title = models.ForeignKey(
-        JobTitle,
-        on_delete=models.CASCADE
-    )
-    category = models.ForeignKey(
-        JobCategory,
-        on_delete=models.CASCADE
-    )
+    employer = models.ForeignKey(Employer, on_delete=models.CASCADE)
+    job_title = models.ForeignKey(JobTitle, on_delete=models.CASCADE)
+    category = models.ForeignKey(JobCategory, on_delete=models.CASCADE)
     description = models.TextField()
     requirements = models.TextField(blank=True)
     location = models.CharField(max_length=200)
@@ -81,7 +59,3 @@ class JobPosting(models.Model):
 
     def __str__(self):
         return f"{self.job_title} at {self.employer.company_name}"
-
-    class Meta:
-        db_table = 'employer_jobposting'
-        ordering = ['-date_posted']
