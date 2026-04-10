@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Remove Bookmark – Career Opportunity System</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f4f8; display: flex; min-height: 100vh; }
+
+    .sidebar { width: 230px; min-height: 100vh; background: #1a3550; display: flex; flex-direction: column; padding: 28px 0; flex-shrink: 0; }
+    .sidebar .brand { color: #fff; font-size: 1.15rem; font-weight: 700; padding: 0 24px 28px; border-bottom: 1px solid rgba(255,255,255,.1); }
+    .sidebar .brand span { color: #f4a623; }
+    .sidebar nav { padding: 16px 12px; flex: 1; }
+    .sidebar nav a { display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,.7); text-decoration: none; padding: 10px 14px; border-radius: 8px; font-size: .93rem; margin-bottom: 4px; transition: all .15s; }
+    .sidebar nav a:hover, .sidebar nav a.active { background: rgba(255,255,255,.12); color: #fff; }
+    .sidebar nav a.danger { color: #ff8a80; }
+    .sidebar nav a.danger:hover { background: rgba(255,80,80,.15); color: #ff5252; }
+    .sidebar .divider { border: none; border-top: 1px solid rgba(255,255,255,.1); margin: 10px 12px; }
+
+    .main { flex: 1; padding: 36px; display: flex; align-items: center; justify-content: center; }
+
+    .confirm-card { background: #fff; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,.08); padding: 40px; width: 100%; max-width: 480px; text-align: center; }
+    .confirm-card .icon { font-size: 3rem; margin-bottom: 16px; }
+    .confirm-card h1 { font-size: 1.3rem; font-weight: 700; color: #1a3550; margin-bottom: 10px; }
+    .confirm-card p { color: #7a8fa6; font-size: .95rem; margin-bottom: 8px; }
+    .confirm-card .job-name { font-weight: 700; color: #1a3550; font-size: 1.05rem; background: #f7fafc; padding: 10px 16px; border-radius: 8px; margin: 16px 0 28px; }
+
+    .actions { display: flex; gap: 12px; justify-content: center; }
+    .btn-confirm { padding: 12px 32px; background: #e74c3c; color: #fff; border: none; border-radius: 9px; font-size: .97rem; font-weight: 600; cursor: pointer; transition: background .15s; }
+    .btn-confirm:hover { background: #c0392b; }
+    .btn-cancel { padding: 12px 32px; background: #f0f4f8; color: #1a3550; border-radius: 9px; text-decoration: none; font-size: .97rem; font-weight: 600; }
+    .btn-cancel:hover { background: #dce8f0; }
+  </style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="brand">Career<span>OS</span></div>
+  <nav>
+    <a href="/accounts/dashboard/">🏠 Dashboard</a>
+    <a href="/accounts/profile/">👤 My Profile</a>
+    <a href="/bookmarks" class="active">🔖 My Bookmarks</a>
+    <hr class="divider">
+    <a href="/accounts/logout/" class="danger">🚪 Logout</a>
+  </nav>
+</aside>
+
+<main class="main">
+  <div class="confirm-card">
+    <div class="icon">🗑️</div>
+    <h1>Remove Bookmark?</h1>
+    <p>You are about to remove this saved job:</p>
+    <div class="job-name">
+      {{ bookmark.job_title }}
+      {% if bookmark.company_name %}<br><span style="font-weight:400;font-size:.9rem;color:#7a8fa6">{{ bookmark.company_name }}</span>{% endif %}
+    </div>
+    <p style="font-size:.85rem;color:#aab8c8;margin-bottom:28px">This action cannot be undone.</p>
+    <div class="actions">
+      <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn-confirm">Yes, Remove</button>
+      </form>
+      <a href="/bookmarks" class="btn-cancel">Cancel</a>
+    </div>
+  </div>
+</main>
+</body>
+</html>
