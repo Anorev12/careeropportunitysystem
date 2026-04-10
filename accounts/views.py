@@ -1,30 +1,19 @@
-from django.shortcuts import render
-
-# Create your views here.
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 
-# ──────────────────────────────────────────────────────────────
-# Index Page  —  127.0.0.1:8080/
-# ──────────────────────────────────────────────────────────────
-
-@login_required(login_url='/login/')
+@login_required(login_url='/accounts/login/')   # ← fixed
 def index(request):
     """Main landing page — requires authentication."""
     return render(request, 'accounts/index.html')
 
 
-# ──────────────────────────────────────────────────────────────
-# Login Page  —  127.0.0.1:8080/login/
-# ──────────────────────────────────────────────────────────────
-
 def login_view(request):
     """Authenticate a user and redirect to the index page."""
     if request.user.is_authenticated:
-        return redirect('index')
+        return redirect('accounts_index')       # ← fixed
 
     if request.method == 'POST':
         email    = request.POST.get('email', '').strip()
@@ -40,16 +29,12 @@ def login_view(request):
             else:
                 login(request, user)
                 messages.success(request, f'Welcome back, {user.fullname}!')
-                return redirect('index')
+                return redirect('accounts_index')   # ← fixed
         else:
             messages.error(request, 'Invalid email or password. Please try again.')
 
     return render(request, 'accounts/login.html')
 
-
-# ──────────────────────────────────────────────────────────────
-# Logout
-# ──────────────────────────────────────────────────────────────
 
 def logout_view(request):
     """Log the current user out and redirect to the login page."""
