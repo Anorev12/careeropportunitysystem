@@ -45,7 +45,7 @@ ROOT_URLCONF = 'careeropportunitysystem.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [BASE_DIR / 'templates'/ 'careeropportunitysystem'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -89,3 +89,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+APPEND_SLASH = True
+
+# Custom user model (accounts app)
+AUTH_USER_MODEL = 'accounts.User'  # ← ask Member 1 what his model class is named
+
+# Media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
