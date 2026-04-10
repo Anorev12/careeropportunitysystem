@@ -45,10 +45,7 @@ ROOT_URLCONF = 'careeropportunitysystem.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            BASE_DIR / 'templates',
-            BASE_DIR / 'application' / 'templates',   # ← add this line
-        ],
+        'DIRS': [BASE_DIR / 'templates'/ 'careeropportunitysystem'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -67,9 +64,9 @@ WSGI_APPLICATION = 'careeropportunitysystem.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'careeropportunitysystem',
+        'NAME': 'employer',
         'USER': 'root',
-        'PASSWORD': 'Abebea2004', # Update this if @Root123_ was the correct one
+        'PASSWORD': '@Root123_', # Update this if @Root123_ was the correct one
         'HOST': '127.0.0.1',
         'PORT': '3306',
     }

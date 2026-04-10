@@ -15,7 +15,7 @@ class EmployerRegisterForm(UserCreationForm):
 
     class Meta:
         model  = User                              # ← now points to accounts.User
-        fields = ['email', 'fullname', 'password1', 'password2']   # ← email not username
+        fields = ['email', 'password1', 'password2']   # ← email not username
 
 
 class JobPostingForm(forms.Form):
