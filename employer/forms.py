@@ -7,6 +7,7 @@ User = get_user_model()   # ← gets accounts.User instead of auth.User
 
 
 class EmployerRegisterForm(UserCreationForm):
+    username = forms.CharField(max_length=150)
     company_name        = forms.CharField(max_length=200)
     company_description = forms.CharField(widget=forms.Textarea(attrs={'rows': 3}), required=False)
     company_address     = forms.CharField(max_length=300, required=False)
@@ -15,7 +16,7 @@ class EmployerRegisterForm(UserCreationForm):
 
     class Meta:
         model  = User                              # ← now points to accounts.User
-        fields = ['email', 'fullname', 'password1', 'password2']   # ← email not username
+        fields = ['username', 'password1', 'password2']   # ← email not username
 
 
 class JobPostingForm(forms.Form):

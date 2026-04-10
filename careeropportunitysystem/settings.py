@@ -65,13 +65,21 @@ WSGI_APPLICATION = 'careeropportunitysystem.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'employer',
+        'NAME': 'careeropportunitysystem', #change it to your database name created on your end
         'USER': 'root',
-        'PASSWORD': '@Root123_', # Update this if @Root123_ was the correct one
+        'PASSWORD': '@Root123_', #change this to your localhost root password
         'HOST': '127.0.0.1',
         'PORT': '3306',
     }
 }
+
+# ── CUSTOM USER MODEL ─────────────────────────────────────────────────────────
+AUTH_USER_MODEL = 'accounts.User'
+
+# ── AUTH REDIRECTS ────────────────────────────────────────────────────────────
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/accounts/dashboard/'
+LOGOUT_REDIRECT_URL = '/'
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [

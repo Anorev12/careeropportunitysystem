@@ -1,25 +1,210 @@
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Login - Career Opportunity System</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login – Career Opportunity System</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #dce8f0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 8px 32px rgba(30,60,90,.13);
+      padding: 52px 52px 36px 52px;
+      width: 100%;
+      max-width: 460px;
+      text-align: center;
+    }
+
+    .card .icon {
+      font-size: 2.6rem;
+      margin-bottom: 14px;
+    }
+
+    .card h1 {
+      font-size: 1.55rem;
+      font-weight: 700;
+      color: #1a3550;
+      margin-bottom: 6px;
+      letter-spacing: .01em;
+    }
+
+    .card .subtitle {
+      font-size: .93rem;
+      color: #8a9bb0;
+      margin-bottom: 32px;
+    }
+
+    /* ── non-field errors ── */
+    .error-box {
+      background: #fff0f0;
+      border: 1px solid #ffb3b3;
+      border-radius: 8px;
+      color: #c0392b;
+      font-size: .88rem;
+      padding: 10px 14px;
+      margin-bottom: 18px;
+      text-align: left;
+    }
+
+    /* ── form groups ── */
+    .form-group {
+      text-align: left;
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: .85rem;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 6px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 13px 16px;
+      border: 1.5px solid #d0dce8;
+      border-radius: 9px;
+      font-size: .97rem;
+      color: #1a3550;
+      background: #f7fafd;
+      transition: border-color .2s, box-shadow .2s;
+      outline: none;
+    }
+
+    .form-group input:focus {
+      border-color: #1a3550;
+      box-shadow: 0 0 0 3px rgba(26,53,80,.1);
+      background: #fff;
+    }
+
+    .form-group input.error {
+      border-color: #e74c3c;
+    }
+
+    .field-error {
+      color: #e74c3c;
+      font-size: .82rem;
+      margin-top: 4px;
+    }
+
+    /* ── submit button ── */
+    .btn-signin {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      background: #1a3550;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 9px;
+      cursor: pointer;
+      margin-top: 8px;
+      letter-spacing: .02em;
+      transition: background .2s, transform .1s;
+    }
+
+    .btn-signin:hover  { background: #24496e; }
+    .btn-signin:active { transform: scale(.98); }
+
+    /* ── footer links ── */
+    .card-footer {
+      margin-top: 28px;
+      font-size: .85rem;
+      color: #8a9bb0;
+    }
+
+    .card-footer a {
+      color: #1a3550;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .card-footer a:hover { text-decoration: underline; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #e8eef4;
+      margin: 24px 0 18px;
+    }
+
+    .copyright {
+      font-size: .8rem;
+      color: #b0bec8;
+      margin-top: 18px;
+    }
+  </style>
 </head>
 <body>
-  <h1>Login</h1>
 
-  {% if messages %}
-    {% for message in messages %}
-      <p style="color:red;">{{ message }}</p>
-    {% endfor %}
-  {% endif %}
+<div class="card">
+  <div class="icon">💼</div>
+  <h1>Career Opportunity System</h1>
+  <p class="subtitle">Sign in to your account to continue</p>
 
-  <form method="POST">
+  <form method="post" action="{% url 'accounts:login' %}" novalidate>
     {% csrf_token %}
-    <label>Email:</label><br>
-    <input type="email" name="email" required><br><br>
-    <label>Password:</label><br>
-    <input type="password" name="password" required><br><br>
-    <button type="submit">Login</button>
+
+    {% if form.non_field_errors %}
+    <div class="error-box">{{ form.non_field_errors.0 }}</div>
+    {% endif %}
+
+    <div class="form-group">
+      <label for="id_username">Username</label>
+      <input
+        type="text"
+        id="id_username"
+        name="username"
+        placeholder="Enter your username"
+        value="{{ form.username.value|default:'' }}"
+        autocomplete="username"
+        {% if form.username.errors %}class="error"{% endif %}
+      />
+      {% if form.username.errors %}
+      <div class="field-error">{{ form.username.errors.0 }}</div>
+      {% endif %}
+    </div>
+
+    <div class="form-group">
+      <label for="id_password">Password</label>
+      <input
+        type="password"
+        id="id_password"
+        name="password"
+        placeholder="Enter your password"
+        autocomplete="current-password"
+        {% if form.password.errors %}class="error"{% endif %}
+      />
+      {% if form.password.errors %}
+      <div class="field-error">{{ form.password.errors.0 }}</div>
+      {% endif %}
+    </div>
+
+    <button type="submit" class="btn-signin">Sign In</button>
   </form>
+
+  <hr class="divider">
+
+  <div class="card-footer">
+    Don't have an account? <a href="{% url 'accounts:register' %}">Register here</a>
+  </div>
+
+  <p class="copyright">Career Opportunity System &copy; 2025</p>
+</div>
+
 </body>
 </html>
+{% endblock %}

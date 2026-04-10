@@ -1,0 +1,118 @@
+{% extends 'accounts/base.html' %}
+{% block title %}My Profile – CareerOS{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+  <div class="row">
+
+    <!-- SIDEBAR -->
+    <nav class="col-md-2 sidebar py-3 px-2">
+      <ul class="nav flex-column gap-1">
+        <li class="nav-item">
+          <a class="nav-link px-3 py-2" href="{% url 'accounts:dashboard' %}">
+            <i class="bi bi-speedometer2 me-2"></i>Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active px-3 py-2" href="{% url 'accounts:profile' %}">
+            <i class="bi bi-person-circle me-2"></i>My Profile
+          </a>
+        </li>
+        {% if user.role == 'admin' %}
+        <li class="nav-item">
+          <a class="nav-link px-3 py-2" href="{% url 'accounts:user_list' %}">
+            <i class="bi bi-people me-2"></i>Manage Users
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link px-3 py-2" href="/admin/">
+            <i class="bi bi-gear me-2"></i>Admin Panel
+          </a>
+        </li>
+        {% endif %}
+        <li class="nav-item mt-3">
+          <a class="nav-link px-3 py-2 text-danger" href="{% url 'accounts:logout' %}">
+            <i class="bi bi-box-arrow-right me-2"></i>Logout
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- MAIN -->
+    <main class="col-md-10 p-4">
+      <h4 class="fw-bold mb-4"><i class="bi bi-person-circle me-2"></i>My Profile</h4>
+
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row g-4">
+
+          <!-- Account Information -->
+          <div class="col-md-6">
+            <div class="card p-4">
+              <h6 class="fw-semibold mb-3 border-bottom pb-2">
+                <i class="bi bi-person me-2 text-primary"></i>Account Information
+              </h6>
+              {% for field in user_form %}
+              <div class="mb-3">
+                <label class="form-label fw-semibold small">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                <div class="text-danger small mt-1">{{ field.errors.0 }}</div>
+                {% endif %}
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- Applicant Profile (only if applicant) -->
+          {% if applicant_form %}
+          <div class="col-md-6">
+            <div class="card p-4">
+              <h6 class="fw-semibold mb-3 border-bottom pb-2">
+                <i class="bi bi-person-badge me-2 text-success"></i>Applicant Details
+              </h6>
+              {% for field in applicant_form %}
+              <div class="mb-3">
+                <label class="form-label fw-semibold small">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                <div class="text-danger small mt-1">{{ field.errors.0 }}</div>
+                {% endif %}
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+
+          <!-- Read-only info -->
+          <div class="col-md-6">
+            <div class="card p-4 bg-light">
+              <h6 class="fw-semibold mb-3 border-bottom pb-2">
+                <i class="bi bi-info-circle me-2 text-secondary"></i>Account Details
+              </h6>
+              <p class="mb-2"><strong>Username:</strong> {{ user.username }}</p>
+              <p class="mb-2"><strong>Role:</strong>
+                <span class="badge" style="background:var(--cos-accent)">{{ user.get_role_display }}</span>
+              </p>
+              <p class="mb-2"><strong>Status:</strong>
+                <span class="badge {% if user.status == 'active' %}bg-success{% else %}bg-secondary{% endif %}">
+                  {{ user.get_status_display }}
+                </span>
+              </p>
+              <p class="mb-0"><strong>Member since:</strong> {{ user.date_joined|date:"F d, Y" }}</p>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="mt-4">
+          <button type="submit" class="btn btn-cos px-4 py-2 fw-semibold">
+            <i class="bi bi-check2 me-1"></i>Save Changes
+          </button>
+          <a href="{% url 'accounts:dashboard' %}" class="btn btn-outline-secondary px-4 py-2 ms-2">Cancel</a>
+        </div>
+      </form>
+    </main>
+  </div>
+</div>
+{% endblock %}

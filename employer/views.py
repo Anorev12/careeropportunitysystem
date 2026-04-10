@@ -17,23 +17,30 @@ def get_employer(request):
 # ── Register ──
 def register_view(request):
     form = EmployerRegisterForm(request.POST or None)
+
     if request.method == 'POST':
         if form.is_valid():
-            user = form.save(commit=False)
-            user.role   = 'employer'
+
+            # ✅ Save user properly (handles username + password correctly)
+            user = form.save()
+
+            # ✅ Set extra fields AFTER saving
+            user.role = 'employer'
             user.status = 'active'
             user.save()
 
             Employer.objects.create(
-                user            = user,
-                company_name    = form.cleaned_data['company_name'],
-                company_description = form.cleaned_data['company_description'],
-                company_address = form.cleaned_data['company_address'],
-                contact_email   = form.cleaned_data['contact_email'],
-                contact_number  = form.cleaned_data['contact_number'],
+                user=user,
+                company_name=form.cleaned_data['company_name'],
+                company_description=form.cleaned_data['company_description'],
+                company_address=form.cleaned_data['company_address'],
+                contact_email=form.cleaned_data['contact_email'],
+                contact_number=form.cleaned_data['contact_number'],
             )
+
             messages.success(request, 'Account created! Please log in.')
             return redirect('login')
+
         else:
             messages.error(request, 'Please fix the errors below.')
 
