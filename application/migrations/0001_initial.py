@@ -1,0 +1,85 @@
+# Generated migration for application app
+
+from django.db import migrations, models
+import django.db.models.deletion
+
+
+class Migration(migrations.Migration):
+
+    initial = True
+
+    dependencies = [
+        ('accounts', '0001_initial'),
+        ('employer', '0001_initial'),
+    ]
+
+    operations = [
+        migrations.CreateModel(
+            name='Application',
+            fields=[
+                ('id',               models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('application_date', models.DateField(auto_now_add=True)),
+                ('status',           models.CharField(
+                    choices=[
+                        ('pending',   'Pending'),
+                        ('reviewed',  'Reviewed'),
+                        ('accepted',  'Accepted'),
+                        ('rejected',  'Rejected'),
+                        ('withdrawn', 'Withdrawn'),
+                    ],
+                    default='pending', max_length=20
+                )),
+                ('remarks',   models.TextField(blank=True, null=True)),
+                ('applicant', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE,
+                    related_name='applications',
+                    to='accounts.applicant'
+                )),
+                ('job_posting', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE,
+                    related_name='applications',
+                    to='employer.jobposting'
+                )),
+            ],
+            options={
+                'db_table': 'application',
+                'unique_together': {('applicant', 'job_posting')},
+            },
+        ),
+        migrations.CreateModel(
+            name='Interview',
+            fields=[
+                ('id',             models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('interview_date', models.DateTimeField()),
+                ('interview_type', models.CharField(
+                    choices=[
+                        ('phone',     'Phone'),
+                        ('video',     'Video'),
+                        ('in_person', 'In-Person'),
+                        ('technical', 'Technical'),
+                    ],
+                    default='in_person', max_length=20
+                )),
+                ('interviewer', models.CharField(blank=True, max_length=255, null=True)),
+                ('location',    models.CharField(blank=True, max_length=255, null=True)),
+                ('result', models.CharField(
+                    choices=[
+                        ('passed',  'Passed'),
+                        ('failed',  'Failed'),
+                        ('pending', 'Pending'),
+                        ('no_show', 'No Show'),
+                    ],
+                    default='pending', max_length=20
+                )),
+                ('remarks',     models.TextField(blank=True, null=True)),
+                ('application', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE,
+                    related_name='interviews',
+                    to='application.application'
+                )),
+            ],
+            options={
+                'db_table': 'interview',
+            },
+        ),
+    ]

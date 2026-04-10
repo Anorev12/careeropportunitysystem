@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Register as Employer</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #1a3c5e 0%, #2d6a9f 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+      padding: 2.5rem 2.5rem;
+      width: 100%;
+      max-width: 520px;
+    }
+
+    .card-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .card-header .icon {
+      font-size: 2.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-header h1 {
+      font-size: 1.6rem;
+      color: #1a3c5e;
+      font-weight: 700;
+    }
+
+    .card-header p {
+      font-size: 0.9rem;
+      color: #666;
+      margin-top: 0.3rem;
+    }
+
+    .messages {
+      margin-bottom: 1.2rem;
+    }
+
+    .messages p {
+      background: #fde8e8;
+      color: #c0392b;
+      border-left: 4px solid #e74c3c;
+      border-radius: 6px;
+      padding: 0.6rem 1rem;
+      font-size: 0.88rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .section-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #2d6a9f;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin: 1.4rem 0 0.6rem;
+      padding-bottom: 0.3rem;
+      border-bottom: 1px solid #e0e7ef;
+    }
+
+    form p {
+      margin-bottom: 1rem;
+    }
+
+    form p label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 0.3rem;
+    }
+
+    form p input,
+    form p textarea,
+    form p select {
+      width: 100%;
+      padding: 0.6rem 0.9rem;
+      border: 1px solid #ccd6e0;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      color: #222;
+      background: #f7fafd;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      font-family: inherit;
+    }
+
+    form p input:focus,
+    form p textarea:focus,
+    form p select:focus {
+      outline: none;
+      border-color: #2d6a9f;
+      box-shadow: 0 0 0 3px rgba(45,106,159,0.12);
+      background: #fff;
+    }
+
+    form p .helptext {
+      display: block;
+      font-size: 0.78rem;
+      color: #888;
+      margin-top: 0.25rem;
+    }
+
+    form ul {
+      list-style: none;
+      margin-top: 0.25rem;
+    }
+
+    form ul li {
+      font-size: 0.8rem;
+      color: #e74c3c;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 0.85rem;
+      background: linear-gradient(135deg, #1a3c5e, #2d6a9f);
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 1.5rem;
+      transition: opacity 0.2s, transform 0.1s;
+      letter-spacing: 0.03em;
+    }
+
+    .btn-submit:hover  { opacity: 0.92; }
+    .btn-submit:active { transform: scale(0.98); }
+
+    .login-link {
+      text-align: center;
+      margin-top: 1.2rem;
+      font-size: 0.88rem;
+      color: #666;
+    }
+
+    .login-link a {
+      color: #2d6a9f;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .login-link a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<div class="card">
+
+  <div class="card-header">
+    <div class="icon">🏢</div>
+    <h1>Register as Employer</h1>
+    <p>Create your company account to start posting jobs.</p>
+  </div>
+
+  {% if messages %}
+    <div class="messages">
+      {% for message in messages %}
+        <p>{{ message }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <form method="POST">
+    {% csrf_token %}
+
+    <div class="section-label">Account Information</div>
+    {{ form.email.label_tag }}
+    {{ form.email }}
+    {{ form.email.errors }}
+
+    <br>
+
+    {{ form.fullname.label_tag }}
+    {{ form.fullname }}
+    {{ form.fullname.errors }}
+
+    <br>
+
+    {{ form.password1.label_tag }}
+    {{ form.password1 }}
+    {{ form.password1.errors }}
+
+    <br>
+
+    {{ form.password2.label_tag }}
+    {{ form.password2 }}
+    {{ form.password2.errors }}
+
+    <div class="section-label">Company Information</div>
+
+    {{ form.company_name.label_tag }}
+    {{ form.company_name }}
+    {{ form.company_name.errors }}
+
+    <br>
+
+    {{ form.company_description.label_tag }}
+    {{ form.company_description }}
+    {{ form.company_description.errors }}
+
+    <br>
+
+    {{ form.company_address.label_tag }}
+    {{ form.company_address }}
+    {{ form.company_address.errors }}
+
+    <br>
+
+    {{ form.contact_email.label_tag }}
+    {{ form.contact_email }}
+    {{ form.contact_email.errors }}
+
+    <br>
+
+    {{ form.contact_number.label_tag }}
+    {{ form.contact_number }}
+    {{ form.contact_number.errors }}
+
+    <button type="submit" class="btn-submit">Create Employer Account</button>
+  </form>
+
+  <div class="login-link">
+    Already have an account? <a href="{% url 'login' %}">Login here</a>
+  </div>
+
+</div>
+
+</body>
+</html>
