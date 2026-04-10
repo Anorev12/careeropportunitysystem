@@ -16,25 +16,28 @@ def get_employer(request):
 
 # ── Register ──
 def register_view(request):
+    form = EmployerRegisterForm(request.POST or None)
     if request.method == 'POST':
-        form = EmployerRegisterForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            Employer.objects.create(
-                user=user,
-                company_name=form.cleaned_data['company_name'],
-                company_description=form.cleaned_data['company_description'],
-                company_address=form.cleaned_data['company_address'],
-                contact_email=form.cleaned_data['contact_email'],
-                contact_number=form.cleaned_data['contact_number'],
-            )
-            login(request, user)
-            messages.success(request, "Account created! Welcome.")
-            return redirect('employer_index')
-    else:
-        form = EmployerRegisterForm()
-    return render(request, 'employer/register.html', {'form': form})
+            user = form.save(commit=False)
+            user.role   = 'employer'
+            user.status = 'active'
+            user.save()
 
+            Employer.objects.create(
+                user            = user,
+                company_name    = form.cleaned_data['company_name'],
+                company_description = form.cleaned_data['company_description'],
+                company_address = form.cleaned_data['company_address'],
+                contact_email   = form.cleaned_data['contact_email'],
+                contact_number  = form.cleaned_data['contact_number'],
+            )
+            messages.success(request, 'Account created! Please log in.')
+            return redirect('login')
+        else:
+            messages.error(request, 'Please fix the errors below.')
+
+    return render(request, 'employer/register.html', {'form': form})
 
 # ── Login ──
 def login_view(request):
