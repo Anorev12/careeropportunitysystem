@@ -45,8 +45,7 @@ ROOT_URLCONF = 'careeropportunitysystem.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR, 'templates'],
-        'APP_DIRS': True,
+        'DIRS': [BASE_DIR / 'templates'/ 'careeropportunitysystem'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -65,21 +64,13 @@ WSGI_APPLICATION = 'careeropportunitysystem.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'careeropportunitysystem', #change it to your database name created on your end
+        'NAME': 'careeropportunitysystem',
         'USER': 'root',
-        'PASSWORD': '@Root123_', #change this to your localhost root password
+        'PASSWORD': '@Root123_', # Update this if @Root123_ was the correct one
         'HOST': '127.0.0.1',
         'PORT': '3306',
     }
 }
-
-# ── CUSTOM USER MODEL ─────────────────────────────────────────────────────────
-AUTH_USER_MODEL = 'accounts.User'
-
-# ── AUTH REDIRECTS ────────────────────────────────────────────────────────────
-LOGIN_URL = '/accounts/login/'
-LOGIN_REDIRECT_URL = '/accounts/dashboard/'
-LOGOUT_REDIRECT_URL = '/'
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
