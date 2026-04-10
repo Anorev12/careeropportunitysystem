@@ -1,9 +1,9 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
 
 # ──────────────────────────────────────────
-# User (base authentication table)
+# User Manager
 # ──────────────────────────────────────────
 
 class UserManager(BaseUserManager):
@@ -19,10 +19,16 @@ class UserManager(BaseUserManager):
     def create_superuser(self, email, password=None, **extra_fields):
         extra_fields.setdefault('role', 'admin')
         extra_fields.setdefault('status', 'active')
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
         return self.create_user(email, password, **extra_fields)
 
 
-class User(AbstractBaseUser):
+# ──────────────────────────────────────────
+# User
+# ──────────────────────────────────────────
+
+class User(AbstractBaseUser, PermissionsMixin):
     ROLE_CHOICES = (
         ('applicant', 'Applicant'),
         ('employer', 'Employer'),
@@ -34,12 +40,26 @@ class User(AbstractBaseUser):
         ('suspended', 'Suspended'),
     )
 
-    # ERD fields: UserID, Fullname, Email, PhoneNumber, Password, Role, Status
     fullname = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
     phone_number = models.CharField(max_length=20, null=True, blank=True)
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='active')
+
+    # Required for Django admin
+    is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+
+    groups = models.ManyToManyField(
+        'auth.Group',
+        related_name='accounts_user_set',
+        blank=True
+    )
+    user_permissions = models.ManyToManyField(
+        'auth.Permission',
+        related_name='accounts_user_set',
+        blank=True
+    )
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['fullname', 'role']
@@ -64,7 +84,6 @@ class Applicant(models.Model):
         ('not_looking', 'Not Looking'),
     )
 
-    # ERD fields: ApplicantID, Address, DateAssigned, ValidID, AvailabilityStatus
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='applicant_profile')
     address = models.TextField(null=True, blank=True)
     date_assigned = models.DateField(null=True, blank=True)
@@ -85,7 +104,6 @@ class Applicant(models.Model):
 # ──────────────────────────────────────────
 
 class Administrator(models.Model):
-    # ERD fields: AdminID, EmployeeNumber, Department, DateAssigned, PermissionsLevel
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='admin_profile')
     employee_number = models.CharField(max_length=50, unique=True)
     department = models.CharField(max_length=100, null=True, blank=True)
@@ -100,11 +118,10 @@ class Administrator(models.Model):
 
 
 # ──────────────────────────────────────────
-# Skill  (linked to Applicant)
+# Skill
 # ──────────────────────────────────────────
 
 class Skill(models.Model):
-    # ERD fields: SkillID, SkillName, SkillDescription, CategoryType
     applicant = models.ForeignKey(
         Applicant, on_delete=models.CASCADE, related_name='skills'
     )
@@ -120,11 +137,10 @@ class Skill(models.Model):
 
 
 # ──────────────────────────────────────────
-# Resume  (linked to Applicant)
+# Resume
 # ──────────────────────────────────────────
 
 class Resume(models.Model):
-    # ERD fields: ResumeID, BackgroundSummary, LastUpdated
     applicant = models.OneToOneField(
         Applicant, on_delete=models.CASCADE, related_name='resume'
     )
@@ -139,11 +155,10 @@ class Resume(models.Model):
 
 
 # ──────────────────────────────────────────
-# Reference  (linked to Applicant via Resume/Applicant)
+# Reference
 # ──────────────────────────────────────────
 
 class Reference(models.Model):
-    # ERD fields: ReferenceID, ReferenceName, JobTitle, ContactNumber, Email
     applicant = models.ForeignKey(
         Applicant, on_delete=models.CASCADE, related_name='references'
     )
@@ -157,4 +172,3 @@ class Reference(models.Model):
 
     def __str__(self):
         return self.reference_name
-
