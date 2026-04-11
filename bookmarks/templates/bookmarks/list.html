@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Bookmarks – Career Opportunity System</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f4f8; display: flex; min-height: 100vh; }
+
+    /* SIDEBAR */
+    .sidebar { width: 230px; min-height: 100vh; background: #1a3550; display: flex; flex-direction: column; padding: 28px 0; flex-shrink: 0; }
+    .sidebar .brand { color: #fff; font-size: 1.15rem; font-weight: 700; padding: 0 24px 28px; border-bottom: 1px solid rgba(255,255,255,.1); }
+    .sidebar .brand span { color: #f4a623; }
+    .sidebar nav { padding: 16px 12px; flex: 1; }
+    .sidebar nav a { display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,.7); text-decoration: none; padding: 10px 14px; border-radius: 8px; font-size: .93rem; margin-bottom: 4px; transition: all .15s; }
+    .sidebar nav a:hover, .sidebar nav a.active { background: rgba(255,255,255,.12); color: #fff; }
+    .sidebar nav a.danger { color: #ff8a80; }
+    .sidebar nav a.danger:hover { background: rgba(255,80,80,.15); color: #ff5252; }
+    .sidebar .divider { border: none; border-top: 1px solid rgba(255,255,255,.1); margin: 10px 12px; }
+
+    /* MAIN */
+    .main { flex: 1; padding: 36px; overflow-y: auto; }
+    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
+    .page-header h1 { font-size: 1.5rem; font-weight: 700; color: #1a3550; }
+    .page-header p { color: #7a8fa6; font-size: .9rem; margin-top: 4px; }
+
+    .btn-add { display: inline-flex; align-items: center; gap: 6px; padding: 10px 22px; background: #f4a623; color: #fff; border-radius: 9px; text-decoration: none; font-weight: 600; font-size: .92rem; transition: background .15s; }
+    .btn-add:hover { background: #d4891a; }
+
+    /* ALERT */
+    .alert { padding: 12px 16px; border-radius: 9px; margin-bottom: 18px; font-size: .9rem; }
+    .alert-success { background: #e6f9f0; color: #1db370; border: 1px solid #b2ebd4; }
+    .alert-error   { background: #ffe8e8; color: #e74c3c; border: 1px solid #ffb3b3; }
+    .alert-info    { background: #e8f4fd; color: #2980b9; border: 1px solid #b3d9f7; }
+
+    /* EMPTY */
+    .empty-state { text-align: center; padding: 60px 20px; background: #fff; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+    .empty-state .icon { font-size: 3.5rem; margin-bottom: 16px; }
+    .empty-state h2 { color: #1a3550; font-size: 1.2rem; margin-bottom: 8px; }
+    .empty-state p { color: #7a8fa6; margin-bottom: 24px; }
+
+    /* GRID */
+    .bookmarks-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+
+    .bookmark-card { background: #fff; border-radius: 14px; padding: 22px; box-shadow: 0 2px 12px rgba(0,0,0,.06); border-left: 4px solid #f4a623; transition: transform .15s, box-shadow .15s; }
+    .bookmark-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.1); }
+
+    .bookmark-card .job-title { font-size: 1.05rem; font-weight: 700; color: #1a3550; margin-bottom: 4px; }
+    .bookmark-card .company { font-size: .88rem; color: #7a8fa6; margin-bottom: 12px; }
+    .bookmark-card .notes-text { font-size: .88rem; color: #4a5568; background: #f7fafc; border-radius: 7px; padding: 10px 12px; margin-bottom: 14px; line-height: 1.5; }
+    .bookmark-card .meta { font-size: .8rem; color: #aab8c8; margin-bottom: 14px; }
+
+    .card-actions { display: flex; gap: 8px; align-items: center; }
+    .btn-url { display: inline-flex; align-items: center; gap: 4px; padding: 6px 14px; background: #e8f4fd; color: #2980b9; border-radius: 7px; text-decoration: none; font-size: .82rem; font-weight: 600; }
+    .btn-url:hover { background: #2980b9; color: #fff; }
+    .btn-edit { padding: 6px 14px; background: #f0f4f8; color: #1a3550; border-radius: 7px; text-decoration: none; font-size: .82rem; font-weight: 600; }
+    .btn-edit:hover { background: #1a3550; color: #fff; }
+    .btn-delete { padding: 6px 14px; background: #ffe8e8; color: #e74c3c; border-radius: 7px; text-decoration: none; font-size: .82rem; font-weight: 600; border: none; cursor: pointer; }
+    .btn-delete:hover { background: #e74c3c; color: #fff; }
+
+    .count-badge { background: #f4a623; color: #fff; border-radius: 20px; padding: 2px 10px; font-size: .78rem; font-weight: 700; margin-left: 8px; }
+  </style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="brand">Career<span>OS</span></div>
+  <nav>
+    <a href="/accounts/dashboard/">🏠 Dashboard</a>
+    <a href="/accounts/profile/">👤 My Profile</a>
+    <a href="/bookmarks" class="active">🔖 My Bookmarks</a>
+    <hr class="divider">
+    <a href="/accounts/logout/" class="danger">🚪 Logout</a>
+  </nav>
+</aside>
+
+<main class="main">
+
+  {% for msg in messages %}
+  <div class="alert alert-{{ msg.tags|default:'info' }}">{{ msg }}</div>
+  {% endfor %}
+
+  <div class="page-header">
+    <div>
+      <h1>My Bookmarks <span class="count-badge">{{ bookmarks|length }}</span></h1>
+      <p>Jobs you've saved for later</p>
+    </div>
+    <a href="/bookmarks/add/" class="btn-add">＋ Add Bookmark</a>
+  </div>
+
+  {% if bookmarks %}
+  <div class="bookmarks-grid">
+    {% for bm in bookmarks %}
+    <div class="bookmark-card">
+      <div class="job-title">{{ bm.job_title }}</div>
+      <div class="company">
+        {% if bm.company_name %}🏢 {{ bm.company_name }}{% else %}🏢 Company not specified{% endif %}
+      </div>
+      {% if bm.notes %}
+      <div class="notes-text">{{ bm.notes }}</div>
+      {% endif %}
+      <div class="meta">📅 Saved on {{ bm.saved_date|date:"F d, Y" }}</div>
+      <div class="card-actions">
+        {% if bm.job_url %}
+        <a href="{{ bm.job_url }}" target="_blank" class="btn-url">🔗 View Job</a>
+        {% endif %}
+        <a href="/bookmarks/{{ bm.pk }}/edit/" class="btn-edit">✏️ Edit</a>
+        <form method="post" action="/bookmarks/{{ bm.pk }}/delete/" style="display:inline" onsubmit="return confirm('Remove this bookmark?')">
+          {% csrf_token %}
+          <button type="submit" class="btn-delete">🗑 Remove</button>
+        </form>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% else %}
+  <div class="empty-state">
+    <div class="icon">🔖</div>
+    <h2>No bookmarks yet</h2>
+    <p>Save jobs you're interested in so you can come back to them later.</p>
+    <a href="/bookmarks/add/" class="btn-add">＋ Add Your First Bookmark</a>
+  </div>
+  {% endif %}
+
+</main>
+</body>
+</html>
