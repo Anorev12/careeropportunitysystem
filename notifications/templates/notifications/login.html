@@ -1,143 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <title>Login - Career Opportunity System</title>
+    <title>Notifications Login</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', sans-serif; background: #f4f6f9; }
-
-        nav {
-            background: #1a3c5e;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        nav .brand { color: white; font-size: 1.2rem; font-weight: 700; text-decoration: none; }
-        nav a { color: #ccc; text-decoration: none; margin-left: 20px; font-size: 0.95rem; }
-        nav a:hover { color: white; }
-
-        .page-header {
-            background: linear-gradient(135deg, #1a3c5e 0%, #2d6a9f 100%);
-            color: white;
-            text-align: center;
-            padding: 50px 20px;
-        }
-        .page-header h1 { font-size: 2rem; margin-bottom: 0.5rem; }
-        .page-header p { font-size: 1rem; opacity: 0.85; }
-
-        .section { max-width: 450px; margin: 50px auto; padding: 0 20px; }
-
-        .card {
-            background: white;
-            border-radius: 12px;
-            padding: 40px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-            border-top: 4px solid #c62828;
-        }
-
-        .card h2 {
-            font-size: 1.4rem;
-            color: #1a3c5e;
-            margin-bottom: 24px;
-            border-left: 4px solid #2d6a9f;
-            padding-left: 12px;
-        }
-
-        .error {
-            background: #ffebee;
-            color: #c62828;
-            padding: 10px 16px;
-            border-radius: 8px;
-            margin-bottom: 16px;
-            font-size: 0.9rem;
-        }
-
-        label {
-            display: block;
-            font-size: 0.9rem;
-            color: #444;
-            margin-bottom: 6px;
-            font-weight: 600;
-        }
-
-        input {
-            width: 100%;
-            padding: 10px 14px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            margin-bottom: 16px;
-            outline: none;
-        }
-
-        input:focus { border-color: #2d6a9f; }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            background: #1a3c5e;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 8px;
-        }
-
-        button:hover { background: #2d6a9f; }
-
-        .back-link {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            color: #2d6a9f;
-            text-decoration: none;
-            font-size: 0.9rem;
-        }
-        .back-link:hover { text-decoration: underline; }
-
-        footer { text-align: center; padding: 30px; color: #999; font-size: 0.85rem; margin-top: 40px; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #1a3c5e; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
+        .card { background: white; border-radius: 16px; padding: 2.5rem; width: 100%; max-width: 400px; }
+        h2 { color: #1a3c5e; margin-bottom: 1.5rem; text-align: center; }
+        .field { margin-bottom: 1rem; }
+        .field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; color: #444; }
+        .field input { width: 100%; padding: 10px 14px; border: 1.5px solid #ddd; border-radius: 8px; font-size: 14px; box-sizing: border-box; }
+        .btn { width: 100%; padding: 12px; background: #1a3c5e; color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 0.5rem; }
+        .error { background: #fff5f5; border: 1px solid #fca5a5; color: #c0392b; padding: 10px; border-radius: 8px; font-size: 13px; margin-bottom: 1rem; }
     </style>
 </head>
 <body>
-
-    <nav>
-        <a class="brand" href="/">🏢 Career Opportunity System</a>
-        <div>
-            <a href="/accounts/login/">Login</a>
-            <a href="/employer/register/">Register</a>
-            <a href="/admin/">Admin</a>
+<div class="card">
+    <h2>🔔 Notifications Login</h2>
+    {% if messages %}
+        {% for message in messages %}
+        <div class="error">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    <form method="POST">
+        {% csrf_token %}
+        <div class="field">
+            <label>Username</label>
+            <input type="text" name="username" placeholder="Enter username" required />
         </div>
-    </nav>
-
-    <div class="page-header">
-        <h1>🔔 Notifications Login</h1>
-        <p>Please login to view your notifications.</p>
-    </div>
-
-    <div class="section">
-        <div class="card">
-            <h2>Login</h2>
-            {% if error %}
-                <div class="error">{{ error }}</div>
-            {% endif %}
-            <form method="POST" action="/notifications/login/">
-                {% csrf_token %}
-                <label>Username:</label>
-                <input type="text" name="username" required>
-                <label>Password:</label>
-                <input type="password" name="password" required>
-                <button type="submit">Login</button>
-            </form>
-            <a href="/" class="back-link">← Back to Home</a>
+        <div class="field">
+            <label>Password</label>
+            <input type="password" name="password" placeholder="Enter password" required />
         </div>
-    </div>
-
-    <footer>
-        &copy; 2025 Career Opportunity System — All rights reserved.
-    </footer>
-
+        <button type="submit" class="btn">Login</button>
+    </form>
+</div>
 </body>
 </html>
