@@ -5,7 +5,7 @@
 <div class="card">
   <div class="card-header">
     <h2>&#128196; Job Applications</h2>
-    <a class="btn btn-primary" href="{% url 'employer_index' %}">&#128269; Browse Jobs</a>
+    <a class="btn btn-primary" href="{% url 'employer:employer_index' %}">&#128269; Browse Jobs</a>
   </div>
 
   {% if applications %}
@@ -24,14 +24,14 @@
       {% for app in applications %}
       <tr>
         <td>{{ forloop.counter }}</td>
-        <td><strong>{{ app.job_posting.job_title }}</strong></td>
-        <td>{{ app.job_posting.employer.company_name }}</td>
+        <td><strong>{{ app.job_posting.Job_Title }}</strong></td>
+        <td>{{ app.job_posting.employer.CompanyName }}</td>
         <td>{{ app.application_date }}</td>
         <td><span class="badge badge-{{ app.status }}">{{ app.get_status_display }}</span></td>
         <td>
-          <a class="btn btn-blue btn-sm" href="{% url 'application_detail' app.pk %}">View</a>
+          <a class="btn btn-blue btn-sm" href="{% url 'application:application_detail' app.pk %}">View</a>
           {% if app.status == 'pending' or app.status == 'reviewed' %}
-            <a class="btn btn-red btn-sm" href="{% url 'withdraw_application' app.pk %}"
+            <a class="btn btn-red btn-sm" href="{% url 'application:withdraw_application' app.pk %}"
                onclick="return confirm('Withdraw this application?')">Withdraw</a>
           {% endif %}
         </td>
@@ -43,7 +43,7 @@
   <div class="empty">
     <div class="icon">&#128196;</div>
     <p>No applications yet.</p>
-    <a class="btn btn-primary" href="{% url 'employer_index' %}" style="margin-top:1rem">Browse Jobs</a>
+    <a class="btn btn-primary" href="{% url 'employer:employer_index' %}" style="margin-top:1rem">Browse Jobs</a>
   </div>
   {% endif %}
 </div>

@@ -5,13 +5,12 @@
 <div class="card" style="max-width:600px;margin:0 auto">
   <div class="card-header">
     <h2>&#9997; Apply for Job</h2>
-    <a class="btn btn-gray btn-sm" href="{% url 'application_list' %}">&#8592; Back</a>
+    <a class="btn btn-gray btn-sm" href="{% url 'application:application_list' %}">&#8592; Back</a>
   </div>
 
-  <!-- Job Summary -->
   <div style="background:#f0f4f8;border-radius:8px;padding:1rem 1.25rem;margin-bottom:1.5rem;">
     <p style="font-size:.8rem;color:#6c757d;text-transform:uppercase;font-weight:700;margin-bottom:.3rem;">Applying For</p>
-    <p style="font-size:1.05rem;font-weight:700;color:#1a3c5e;">{{ job.job_title }}</p>
+    <p style="font-size:1.05rem;font-weight:700;color:#1a3c5e;">{{ job.jobTitle }}</p>
     <p style="font-size:.88rem;color:#555;margin-top:.2rem;">
       {{ job.employer.company_name }} &nbsp;&middot;&nbsp; {{ job.location }}
       {% if job.salary_min and job.salary_max %}
@@ -30,7 +29,7 @@
     </div>
     <div class="form-actions">
       <button type="submit" class="btn btn-green">Submit Application</button>
-      <a class="btn btn-gray" href="{% url 'employer_index' %}">Cancel</a>
+      <a class="btn btn-gray" href="{% url 'employer:employer_index' %}">Cancel</a>
     </div>
   </form>
 </div>

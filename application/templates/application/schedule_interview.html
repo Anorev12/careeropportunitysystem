@@ -5,12 +5,12 @@
 <div class="card" style="max-width:580px;margin:0 auto">
   <div class="card-header">
     <h2>&#128197; {% if edit_mode %}Edit{% else %}Schedule{% endif %} Interview</h2>
-    <a class="btn btn-gray btn-sm" href="{% url 'application_detail' application.pk %}">&#8592; Back</a>
+    <a class="btn btn-gray btn-sm" href="{% url 'application:application_detail' application.pk %}">&#8592; Back</a>
   </div>
 
   <div style="background:#f0f4f8;border-radius:8px;padding:.85rem 1.1rem;margin-bottom:1.3rem;font-size:.88rem;color:#555;">
     <strong>{{ application.applicant.user.fullname }}</strong> &rarr;
-    {{ application.job_posting.job_title }} @ {{ application.job_posting.employer.company_name }}
+    {{ application.job_posting.JobTitle }} @ {{ application.job_posting.employer.CompanyName }}
   </div>
 
   <form method="POST">
@@ -56,7 +56,7 @@
       <button type="submit" class="btn btn-green">
         {% if edit_mode %}Update Interview{% else %}Schedule Interview{% endif %}
       </button>
-      <a class="btn btn-gray" href="{% url 'application_detail' application.pk %}">Cancel</a>
+      <a class="btn btn-gray" href="{% url 'application:application_detail' application.pk %}">Cancel</a>
     </div>
   </form>
 </div>
