@@ -63,10 +63,10 @@ WSGI_APPLICATION = 'careeropportunitysystem.wsgi.application'
 # Note: Ensure you have 'mysqlclient' or 'django-mysql' installed in your .venv
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'employer',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'careeropportunitysystem',
         'USER': 'root',
-        'PASSWORD': '@Root123_', # Update this if @Root123_ was the correct one
+        'PASSWORD': 'Abebea2004', # Update this if @Root123_ was the correct one
         'HOST': '127.0.0.1',
         'PORT': '3306',
     }
