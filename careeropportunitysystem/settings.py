@@ -64,7 +64,7 @@ WSGI_APPLICATION = 'careeropportunitysystem.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'employer',
+        'NAME': BASE_DIR / 'db.sqlite3',
         'USER': 'root',
         'PASSWORD': '@Root123_', # Update this if @Root123_ was the correct one
         'HOST': '127.0.0.1',
