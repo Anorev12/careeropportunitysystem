@@ -1,20 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Employer Login</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bookmarks Login – Career Opportunity System</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-      .bottom-link {
-      text-align: center;
-      margin-top: 1.2rem;
-      font-size: 0.88rem;
-      color: #7a8fa6;
-    }
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #1a3c5e 0%, #2d6a9f 100%);
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #1a3550 0%, #2d6a9f 100%);
       min-height: 100vh;
       display: flex;
       align-items: center;
@@ -31,29 +26,14 @@
       max-width: 420px;
     }
 
-    .card-header {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-
+    .card-header { text-align: center; margin-bottom: 2rem; }
     .card-header .icon { font-size: 2.8rem; margin-bottom: 0.5rem; }
-
-    .card-header h1 {
-      font-size: 1.6rem;
-      color: #1a3c5e;
-      font-weight: 700;
-    }
-
-    .card-header p {
-      font-size: 0.9rem;
-      color: #666;
-      margin-top: 0.3rem;
-    }
+    .card-header h1 { font-size: 1.6rem; color: #1a3550; font-weight: 700; }
+    .card-header p  { font-size: 0.9rem; color: #7a8fa6; margin-top: 0.3rem; }
 
     .messages { margin-bottom: 1.2rem; }
-
     .messages p {
-      background: #fde8e8;
+      background: #ffe8e8;
       color: #c0392b;
       border-left: 4px solid #e74c3c;
       border-radius: 6px;
@@ -62,83 +42,66 @@
       margin-bottom: 0.4rem;
     }
 
-    .divider {
-      border: none;
-      border-top: 1px solid #e0e7ef;
-      margin-bottom: 1.5rem;
-    }
+    .divider { border: none; border-top: 1px solid #e0e7ef; margin-bottom: 1.5rem; }
 
     .form-group { margin-bottom: 1.2rem; }
-
     .form-group label {
       display: block;
       font-size: 0.85rem;
       font-weight: 600;
-      color: #333;
+      color: #2c3e50;
       margin-bottom: 0.35rem;
     }
-
     .form-group input {
       width: 100%;
       padding: 0.65rem 0.9rem;
-      border: 1px solid #ccd6e0;
-      border-radius: 8px;
+      border: 1.5px solid #d0dce8;
+      border-radius: 9px;
       font-size: 0.92rem;
-      color: #222;
+      color: #1a3550;
       background: #f7fafd;
       transition: border-color 0.2s, box-shadow 0.2s;
       font-family: inherit;
     }
-
     .form-group input:focus {
       outline: none;
-      border-color: #2d6a9f;
-      box-shadow: 0 0 0 3px rgba(45,106,159,0.12);
+      border-color: #1a3550;
+      box-shadow: 0 0 0 3px rgba(26,53,80,0.1);
       background: #fff;
     }
 
     .btn-submit {
       width: 100%;
       padding: 0.85rem;
-      background: linear-gradient(135deg, #1a3c5e, #2d6a9f);
+      background: #1a3550;
       color: #fff;
       font-size: 1rem;
       font-weight: 700;
       border: none;
-      border-radius: 8px;
+      border-radius: 9px;
       cursor: pointer;
       margin-top: 0.5rem;
-      transition: opacity 0.2s, transform 0.1s;
-      letter-spacing: 0.03em;
+      transition: background 0.2s;
     }
+    .btn-submit:hover { background: #24496e; }
 
-    .btn-submit:hover  { opacity: 0.92; }
-    .btn-submit:active { transform: scale(0.98); }
-
-    .register-link {
+    .bottom-link {
       text-align: center;
       margin-top: 1.2rem;
       font-size: 0.88rem;
-      color: #666;
+      color: #7a8fa6;
     }
-
-    .register-link a {
-      color: #2d6a9f;
-      font-weight: 600;
-      text-decoration: none;
-    }
-
-    .register-link a:hover { text-decoration: underline; }
+    .bottom-link a { color: #1a3550; font-weight: 600; text-decoration: none; }
+    .bottom-link a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
 
 <div class="card">
-
   <div class="card-header">
-    <div class="icon">🔐</div>
-    <h1>Employer Login</h1>
-    <p>Welcome back! Sign in to manage your job postings.</p>
+    <div class="icon">🔖</div>
+    <h1>Bookmarks Login</h1>
+    <p>Sign in to view your saved jobs.</p>
   </div>
 
   {% if messages %}
@@ -153,23 +116,17 @@
 
   <form method="POST">
     {% csrf_token %}
-
     <div class="form-group">
-      <label for="username">Username</label>
-      <input type="text" id="username" name="username" placeholder="Enter your username" required>
-    </div>
-
+  <label for="username">Username</label>
+  <input type="text" id="username" name="username" placeholder="Enter your username" required>
+</div>
     <div class="form-group">
       <label for="password">Password</label>
       <input type="password" id="password" name="password" placeholder="Enter your password" required>
     </div>
-
-    <button type="submit" class="btn-submit">Log In</button>
+    <button type="submit" class="btn-submit">Login</button>
   </form>
 
-  <div class="register-link">
-    No account? <a href="{% url 'employer:register' %}">Register here</a>
-  </div>
   <div class="bottom-link">
     <a href="/">← Back to Home</a>
   </div>
