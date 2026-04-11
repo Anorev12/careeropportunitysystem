@@ -2,12 +2,12 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from accounts.forms import LoginForm, RegisterForm
-from accounts.models import Applicant
 from .models import Application, Interview
 from .forms import ApplicationForm, ApplicationStatusForm, InterviewForm
 from employer.models import JobPosting
 
+
+# ── Helper ────────────────────────────────────────────────────────────────────
 
 def get_applicant(request):
     try:
@@ -16,50 +16,84 @@ def get_applicant(request):
         return None
 
 
-def application_login_view(request):
+# ── Login ─────────────────────────────────────────────────────────────────────
+
+def application_login(request):
     if request.user.is_authenticated:
         return redirect('application:application_list')
 
-    form = LoginForm(request, data=request.POST or None)
+    from django.contrib.auth.forms import AuthenticationForm
+    form = AuthenticationForm(request, data=request.POST or None)
+
     if request.method == 'POST' and form.is_valid():
         user = form.get_user()
-        if user.status == 'suspended':
-            messages.error(request, 'Your account has been suspended.')
-        else:
-            login(request, user)
-            messages.success(request, f'Welcome back, {user.fullname}!')
-            return redirect('application:application_list')
+        login(request, user)
+        messages.success(request, f'Welcome back, {user.get_full_name() or user.username}!')
+        return redirect('application:application_list')
 
-    return render(request, 'application/login.html', {
-        'form':     form,
-        'reg_form': RegisterForm(),
-    })
+    return render(request, 'application/login.html', {'form': form})
 
 
-def application_register_view(request):
+# ── Register ──────────────────────────────────────────────────────────────────
+
+def application_register(request):
     if request.user.is_authenticated:
         return redirect('application:application_list')
 
+    from accounts.models import Applicant
+    from accounts.forms import RegisterForm
+
     reg_form = RegisterForm(request.POST or None)
+
     if request.method == 'POST' and reg_form.is_valid():
-        user = reg_form.save()
-        if user.role == 'applicant':
-            Applicant.objects.create(user=user)
+        user = reg_form.save(commit=False)
+        user.role = 'applicant'
+        user.status = 'active'
+        user.save()
+        reg_form.save_m2m()
+        Applicant.objects.create(user=user)
         login(request, user)
-        messages.success(request, 'Account created! Welcome to the Applications Portal.')
+        messages.success(request, 'Account created successfully!')
         return redirect('application:application_list')
 
-    return render(request, 'application/login.html', {
-        'form':     LoginForm(request),
-        'reg_form': reg_form,
+    return render(request, 'application/login.html', {'form': None, 'reg_form': reg_form})
+
+
+# ── Logout ────────────────────────────────────────────────────────────────────
+
+def application_logout(request):
+    logout(request)
+    return redirect('application:application_login')
+
+
+# ── Browse Jobs ───────────────────────────────────────────────────────────────
+
+@login_required(login_url='/application/login/')
+def job_list(request):
+    jobs = JobPosting.objects.filter(status='open').select_related(
+        'employer', 'job_title', 'category'
+    ).order_by('-posting_date')
+    return render(request, 'application/job_list.html', {'jobs': jobs})
+
+
+# ── Job Detail ────────────────────────────────────────────────────────────────
+
+@login_required(login_url='/application/login/')
+def job_detail(request, pk):
+    job = get_object_or_404(JobPosting, pk=pk)
+    already_applied = False
+    applicant = get_applicant(request)
+    if applicant:
+        already_applied = Application.objects.filter(
+            applicant=applicant, job_posting=job
+        ).exists()
+    return render(request, 'application/job_detail.html', {
+        'job': job,
+        'already_applied': already_applied,
     })
 
 
-def application_logout_view(request):
-    logout(request)
-    messages.info(request, 'You have been logged out.')
-    return redirect('application:application_login')
-
+# ── Application List ──────────────────────────────────────────────────────────
 
 @login_required(login_url='/application/login/')
 def application_list(request):
@@ -74,6 +108,8 @@ def application_list(request):
         )
     return render(request, 'application/application_list.html', {'applications': applications})
 
+
+# ── Apply for a Job ───────────────────────────────────────────────────────────
 
 @login_required(login_url='/application/login/')
 def apply_job(request, job_id):
@@ -103,6 +139,8 @@ def apply_job(request, job_id):
     return render(request, 'application/apply_job.html', {'form': form, 'job': job})
 
 
+# ── Application Detail ────────────────────────────────────────────────────────
+
 @login_required(login_url='/application/login/')
 def application_detail(request, pk):
     application = get_object_or_404(Application, pk=pk)
@@ -112,6 +150,8 @@ def application_detail(request, pk):
         'interviews':  interviews,
     })
 
+
+# ── Withdraw Application ──────────────────────────────────────────────────────
 
 @login_required(login_url='/application/login/')
 def withdraw_application(request, pk):
@@ -132,6 +172,8 @@ def withdraw_application(request, pk):
     return redirect('application:application_list')
 
 
+# ── Update Application Status ─────────────────────────────────────────────────
+
 @login_required(login_url='/application/login/')
 def update_application_status(request, pk):
     application = get_object_or_404(Application, pk=pk)
@@ -150,6 +192,8 @@ def update_application_status(request, pk):
         'application': application,
     })
 
+
+# ── Schedule Interview ────────────────────────────────────────────────────────
 
 @login_required(login_url='/application/login/')
 def schedule_interview(request, application_pk):
@@ -172,6 +216,8 @@ def schedule_interview(request, application_pk):
     })
 
 
+# ── Edit Interview ────────────────────────────────────────────────────────────
+
 @login_required(login_url='/application/login/')
 def edit_interview(request, pk):
     interview = get_object_or_404(Interview, pk=pk)
@@ -191,6 +237,8 @@ def edit_interview(request, pk):
         'edit_mode':   True,
     })
 
+
+# ── Delete Interview ──────────────────────────────────────────────────────────
 
 @login_required(login_url='/application/login/')
 def delete_interview(request, pk):

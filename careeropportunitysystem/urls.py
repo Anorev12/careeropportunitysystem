@@ -11,12 +11,12 @@ def home(request):
 
 urlpatterns = [
     path('admin/',         admin.site.urls),
-    path('',               home,                                              name='home'),
-    path('accounts/',      include(('accounts.urls',     'accounts'))),
-    path('employer/',      include(('employer.urls',     'employer'))),
-    path('application/',   include(('application.urls',  'application'))),
-    path('bookmarks/',     include(('bookmarks.urls',    'bookmarks'))),
-    path('notifications/', include(('notifications.urls','notifications'))),
+    path('',               home,                         name='home'),
+    path('accounts/',      include('accounts.urls')),
+    path('employer/',      include('employer.urls', namespace='employer')),
+    path('application/',   include('application.urls')),
+    path('bookmarks/',     include('bookmarks.urls')),
+    path('notifications/', include('notifications.urls')),
 ]
 
 if settings.DEBUG:
