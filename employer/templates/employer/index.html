@@ -9,8 +9,8 @@
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
         <h2>My Job Postings</h2>
         <div style="display:flex;gap:10px">
-            <a href="{% url 'create_job' %}" style="padding:10px 18px;background:#4CAF50;color:white;border-radius:4px;text-decoration:none">+ Post Job</a>
-            <a href="{% url 'logout' %}" style="padding:10px 18px;background:#f44336;color:white;border-radius:4px;text-decoration:none">Logout</a>
+            <a href="{% url 'employer:create_job' %}" style="padding:10px 18px;background:#4CAF50;color:white;border-radius:4px;text-decoration:none">+ Post Job</a>
+            <a href="{% url 'employer:logout' %}" style="padding:10px 18px;background:#f44336;color:white;border-radius:4px;text-decoration:none">Logout</a>
         </div>
     </div>
 
@@ -34,9 +34,9 @@
                 </p>
             </div>
             <div style="display:flex;gap:8px;flex-shrink:0">
-                <a href="{% url 'view_job' job.id %}" style="padding:8px 14px;background:#2196F3;color:white;border-radius:4px;text-decoration:none;font-size:14px">Applicants</a>
-                <a href="{% url 'edit_job' job.id %}" style="padding:8px 14px;background:#FF9800;color:white;border-radius:4px;text-decoration:none;font-size:14px">Edit</a>
-                <form action="{% url 'delete_job' job.id %}" method="POST" style="display:inline">
+                <a href="{% url 'employer:view_job' job.id %}" style="padding:8px 14px;background:#2196F3;color:white;border-radius:4px;text-decoration:none;font-size:14px">Applicants</a>
+                <a href="{% url 'employer:edit_job' job.id %}" style="padding:8px 14px;background:#FF9800;color:white;border-radius:4px;text-decoration:none;font-size:14px">Edit</a>
+                <form action="{% url 'employer:delete_job' job.id %}" method="POST" style="display:inline">
                     {% csrf_token %}
                     <button type="submit" style="padding:8px 14px;background:#f44336;color:white;border:none;border-radius:4px;cursor:pointer;font-size:14px"
                         onclick="return confirm('Delete this job posting?')">Delete</button>
@@ -47,7 +47,7 @@
     {% else %}
         <div style="text-align:center;padding:60px;color:#999">
             <p>No job postings yet.</p>
-            <a href="{% url 'create_job' %}">Post your first job →</a>
+            <a href="{% url 'employer:create_job' %}">Post your first job →</a>
         </div>
     {% endif %}
 </div>

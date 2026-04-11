@@ -7,7 +7,7 @@ from .forms import LoginForm, RegisterForm, UserProfileForm, ApplicantProfileFor
 
 
 # ─────────────────────────────────────────────
-# INDEX / HOME  (127.0.0.1:8080/)
+# INDEX / HOME  (127.0.0.1:8080/accounts/)
 # ─────────────────────────────────────────────
 def index(request):
     """Public landing page for Career Opportunity System."""
@@ -43,7 +43,6 @@ def register_view(request):
     if request.method == 'POST' and form.is_valid():
         user = form.save(commit=False)
 
-        # Safety check — make sure username is not empty
         if not user.username:
             messages.error(request, 'Username cannot be empty.')
             return render(request, 'accounts/register.html', {'form': form})
@@ -74,7 +73,7 @@ def logout_view(request):
 # ─────────────────────────────────────────────
 # DASHBOARD  (role-aware)
 # ─────────────────────────────────────────────
-@login_required
+@login_required(login_url='/accounts/login/')
 def dashboard(request):
     context = {'user': request.user}
 
@@ -90,9 +89,9 @@ def dashboard(request):
 # ─────────────────────────────────────────────
 # PROFILE
 # ─────────────────────────────────────────────
-@login_required
+@login_required(login_url='/accounts/login/')
 def profile_view(request):
-    user_form  = UserProfileForm(request.POST or None, instance=request.user)
+    user_form = UserProfileForm(request.POST or None, instance=request.user)
     applicant_form = None
 
     if hasattr(request.user, 'applicant_profile'):
@@ -123,7 +122,7 @@ def profile_view(request):
 # ─────────────────────────────────────────────
 # ADMIN: User Management
 # ─────────────────────────────────────────────
-@login_required
+@login_required(login_url='/accounts/login/')
 def user_list(request):
     if request.user.role != 'admin':
         messages.error(request, 'Access denied.')
@@ -133,7 +132,7 @@ def user_list(request):
     return render(request, 'accounts/user_list.html', {'users': users})
 
 
-@login_required
+@login_required(login_url='/accounts/login/')
 def user_detail(request, pk):
     if request.user.role != 'admin':
         messages.error(request, 'Access denied.')
