@@ -6,8 +6,6 @@ from .forms import ApplicationForm, ApplicationStatusForm, InterviewForm
 from employer.models import JobPosting
 
 
-# ── helper ────────────────────────────────────────────────────────────────────
-
 def get_applicant(request):
     try:
         return request.user.applicant_profile
@@ -15,9 +13,7 @@ def get_applicant(request):
         return None
 
 
-# ── Application List ──────────────────────────────────────────────────────────
-
-@login_required(login_url='/employer/login/')
+@login_required(login_url='/accounts/login/')
 def application_list(request):
     applicant = get_applicant(request)
     if applicant:
@@ -31,20 +27,18 @@ def application_list(request):
     return render(request, 'application/application_list.html', {'applications': applications})
 
 
-# ── Apply for a Job ───────────────────────────────────────────────────────────
-
-@login_required(login_url='/employer/login/')
+@login_required(login_url='/accounts/login/')
 def apply_job(request, job_id):
     job = get_object_or_404(JobPosting, pk=job_id)
     applicant = get_applicant(request)
 
     if not applicant:
         messages.error(request, "Only applicants can apply for jobs.")
-        return redirect('application_list')
+        return redirect('application:application_list')
 
     if Application.objects.filter(applicant=applicant, job_posting=job).exists():
         messages.warning(request, "You have already applied for this job.")
-        return redirect('application_list')
+        return redirect('application:application_list')
 
     if request.method == 'POST':
         form = ApplicationForm(request.POST)
@@ -54,16 +48,14 @@ def apply_job(request, job_id):
             app.job_posting = job
             app.save()
             messages.success(request, "Application submitted successfully!")
-            return redirect('application_list')
+            return redirect('application:application_list')
     else:
         form = ApplicationForm(initial={'job_posting': job})
 
     return render(request, 'application/apply_job.html', {'form': form, 'job': job})
 
 
-# ── Application Detail ────────────────────────────────────────────────────────
-
-@login_required(login_url='/employer/login/')
+@login_required(login_url='/accounts/login/')
 def application_detail(request, pk):
     application = get_object_or_404(Application, pk=pk)
     interviews  = application.interviews.all()
@@ -73,16 +65,14 @@ def application_detail(request, pk):
     })
 
 
-# ── Withdraw Application ──────────────────────────────────────────────────────
-
-@login_required(login_url='/employer/login/')
+@login_required(login_url='/accounts/login/')
 def withdraw_application(request, pk):
     application = get_object_or_404(Application, pk=pk)
     applicant   = get_applicant(request)
 
     if not applicant or application.applicant != applicant:
         messages.error(request, "Permission denied.")
-        return redirect('application_list')
+        return redirect('application:application_list')
 
     if application.status not in ('accepted', 'rejected'):
         application.status = 'withdrawn'
@@ -91,12 +81,10 @@ def withdraw_application(request, pk):
     else:
         messages.warning(request, "Cannot withdraw a finalised application.")
 
-    return redirect('application_list')
+    return redirect('application:application_list')
 
 
-# ── Update Application Status ─────────────────────────────────────────────────
-
-@login_required(login_url='/employer/login/')
+@login_required(login_url='/accounts/login/')
 def update_application_status(request, pk):
     application = get_object_or_404(Application, pk=pk)
 
@@ -105,7 +93,7 @@ def update_application_status(request, pk):
         if form.is_valid():
             form.save()
             messages.success(request, "Application status updated.")
-            return redirect('application_detail', pk=pk)
+            return redirect('application:application_detail', pk=pk)
     else:
         form = ApplicationStatusForm(instance=application)
 
@@ -115,9 +103,7 @@ def update_application_status(request, pk):
     })
 
 
-# ── Schedule Interview ────────────────────────────────────────────────────────
-
-@login_required(login_url='/employer/login/')
+@login_required(login_url='/accounts/login/')
 def schedule_interview(request, application_pk):
     application = get_object_or_404(Application, pk=application_pk)
 
@@ -128,7 +114,7 @@ def schedule_interview(request, application_pk):
             interview.application = application
             interview.save()
             messages.success(request, "Interview scheduled.")
-            return redirect('application_detail', pk=application_pk)
+            return redirect('application:application_detail', pk=application_pk)
     else:
         form = InterviewForm()
 
@@ -138,9 +124,7 @@ def schedule_interview(request, application_pk):
     })
 
 
-# ── Edit Interview ────────────────────────────────────────────────────────────
-
-@login_required(login_url='/employer/login/')
+@login_required(login_url='/accounts/login/')
 def edit_interview(request, pk):
     interview = get_object_or_404(Interview, pk=pk)
 
@@ -149,7 +133,7 @@ def edit_interview(request, pk):
         if form.is_valid():
             form.save()
             messages.success(request, "Interview updated.")
-            return redirect('application_detail', pk=interview.application.pk)
+            return redirect('application:application_detail', pk=interview.application.pk)
     else:
         form = InterviewForm(instance=interview)
 
@@ -160,12 +144,10 @@ def edit_interview(request, pk):
     })
 
 
-# ── Delete Interview ──────────────────────────────────────────────────────────
-
-@login_required(login_url='/employer/login/')
+@login_required(login_url='/accounts/login/')
 def delete_interview(request, pk):
     interview = get_object_or_404(Interview, pk=pk)
     app_pk    = interview.application.pk
     interview.delete()
     messages.success(request, "Interview deleted.")
-    return redirect('application_detail', pk=app_pk)
+    return redirect('application:application_detail', pk=app_pk)
