@@ -199,7 +199,7 @@
       <div class="error-box">⚠ {{ form.non_field_errors.0 }}</div>
       {% endif %}
 
-      <form method="post" action="{% url 'application_login' %}" novalidate>
+      <form method="post" action="{% url 'application:application_login' %}" novalidate>
         {% csrf_token %}
 
         <div class="field">
@@ -240,7 +240,7 @@
       <div class="error-box">⚠ Please fix the errors below.</div>
       {% endif %}
 
-      <form method="post" action="{% url 'application_register' %}" novalidate>
+      <form method="post" action="{% url 'application:application_register' %}" novalidate>
         {% csrf_token %}
 
         <div class="row2">

@@ -1,5 +1,5 @@
 """
-Django settings for careeropportunitysystem project.
+Django settings for notifications project.
 """
 
 from pathlib import Path
@@ -45,7 +45,7 @@ ROOT_URLCONF = 'careeropportunitysystem.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'/ 'careeropportunitysystem'],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -66,7 +66,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'careeropportunitysystem',
         'USER': 'root',
-        'PASSWORD': 'Abebea2004', # Update this if @Root123_ was the correct one
+        'PASSWORD': '@Root123_', # Update this if @Root123_ was the correct one
         'HOST': '127.0.0.1',
         'PORT': '3306',
     }
@@ -97,3 +97,8 @@ AUTH_USER_MODEL = 'accounts.User'  # ← ask Member 1 what his model class is na
 # Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# Default login URL
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/accounts/dashboard/'
+LOGOUT_REDIRECT_URL = '/'

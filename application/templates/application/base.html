@@ -151,11 +151,11 @@
 <body>
 
 <nav class="navbar">
-  <a class="brand" href="{% url 'application_list' %}">&#128196; Applications</a>
+  <a class="brand" href="{% url 'application:application_list' %}">&#128196; Applications</a>
   <div class="nav-links">
-    <a href="{% url 'employer_index' %}">Jobs</a>
-    <a href="{% url 'application_list' %}">My Applications</a>
-    <a href="{% url 'logout' %}">Logout</a>
+    <a href="{% url 'employer:employer_index' %}">Jobs</a>
+    <a href="{% url 'application:application_list' %}">My Applications</a>
+    <a href="{% url 'accounts:logout' %}">Logout</a>
   </div>
 </nav>
 

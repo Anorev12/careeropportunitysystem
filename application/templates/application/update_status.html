@@ -5,7 +5,7 @@
 <div class="card" style="max-width:520px;margin:0 auto">
   <div class="card-header">
     <h2>&#9997; Update Status</h2>
-    <a class="btn btn-gray btn-sm" href="{% url 'application_detail' application.pk %}">&#8592; Back</a>
+    <a class="btn btn-gray btn-sm" href="{% url 'application:application_detail' application.pk %}">&#8592; Back</a>
   </div>
 
   <div style="background:#f0f4f8;border-radius:8px;padding:.85rem 1.1rem;margin-bottom:1.3rem;font-size:.88rem;color:#555;">
@@ -26,7 +26,7 @@
     {% endfor %}
     <div class="form-actions">
       <button type="submit" class="btn btn-primary">Save Changes</button>
-      <a class="btn btn-gray" href="{% url 'application_detail' application.pk %}">Cancel</a>
+      <a class="btn btn-gray" href="{% url 'application:application_detail' application.pk %}">Cancel</a>
     </div>
   </form>
 </div>

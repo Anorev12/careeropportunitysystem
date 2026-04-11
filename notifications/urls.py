@@ -4,5 +4,6 @@ from . import views
 app_name = 'notifications'
 
 urlpatterns = [
-    # bookmarks urls will go here
+    path('',       views.notifications,       name='index'),
+    path('login/', views.notifications_login, name='login'),
 ]

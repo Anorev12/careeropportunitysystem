@@ -9,8 +9,6 @@ from .forms import ApplicationForm, ApplicationStatusForm, InterviewForm
 from employer.models import JobPosting
 
 
-# ── helper ────────────────────────────────────────────────────────────────────
-
 def get_applicant(request):
     try:
         return request.user.applicant_profile
@@ -18,15 +16,11 @@ def get_applicant(request):
         return None
 
 
-# ── Application-specific Auth ─────────────────────────────────────────────────
-
 def application_login_view(request):
-    """Login page at /application/login/ — dedicated to the Applications module."""
     if request.user.is_authenticated:
-        return redirect('application_list')
+        return redirect('application:application_list')
 
     form = LoginForm(request, data=request.POST or None)
-
     if request.method == 'POST' and form.is_valid():
         user = form.get_user()
         if user.status == 'suspended':
@@ -34,7 +28,7 @@ def application_login_view(request):
         else:
             login(request, user)
             messages.success(request, f'Welcome back, {user.fullname}!')
-            return redirect('application_list')
+            return redirect('application:application_list')
 
     return render(request, 'application/login.html', {
         'form':     form,
@@ -43,22 +37,18 @@ def application_login_view(request):
 
 
 def application_register_view(request):
-    """Register page at /application/register/ — creates an Applicant account."""
     if request.user.is_authenticated:
-        return redirect('application_list')
+        return redirect('application:application_list')
 
     reg_form = RegisterForm(request.POST or None)
-
     if request.method == 'POST' and reg_form.is_valid():
         user = reg_form.save()
-        # Always create an Applicant profile from this portal
         if user.role == 'applicant':
             Applicant.objects.create(user=user)
         login(request, user)
         messages.success(request, 'Account created! Welcome to the Applications Portal.')
-        return redirect('application_list')
+        return redirect('application:application_list')
 
-    # Validation failed — re-render with errors (JS will open the register tab)
     return render(request, 'application/login.html', {
         'form':     LoginForm(request),
         'reg_form': reg_form,
@@ -66,13 +56,10 @@ def application_register_view(request):
 
 
 def application_logout_view(request):
-    """Logout and redirect back to the application login page."""
     logout(request)
     messages.info(request, 'You have been logged out.')
-    return redirect('application_login')
+    return redirect('application:application_login')
 
-
-# ── Application List ──────────────────────────────────────────────────────────
 
 @login_required(login_url='/application/login/')
 def application_list(request):
@@ -88,8 +75,6 @@ def application_list(request):
     return render(request, 'application/application_list.html', {'applications': applications})
 
 
-# ── Apply for a Job ───────────────────────────────────────────────────────────
-
 @login_required(login_url='/application/login/')
 def apply_job(request, job_id):
     job = get_object_or_404(JobPosting, pk=job_id)
@@ -97,11 +82,11 @@ def apply_job(request, job_id):
 
     if not applicant:
         messages.error(request, "Only applicants can apply for jobs.")
-        return redirect('application_list')
+        return redirect('application:application_list')
 
     if Application.objects.filter(applicant=applicant, job_posting=job).exists():
         messages.warning(request, "You have already applied for this job.")
-        return redirect('application_list')
+        return redirect('application:application_list')
 
     if request.method == 'POST':
         form = ApplicationForm(request.POST)
@@ -111,14 +96,12 @@ def apply_job(request, job_id):
             app.job_posting = job
             app.save()
             messages.success(request, "Application submitted successfully!")
-            return redirect('application_list')
+            return redirect('application:application_list')
     else:
         form = ApplicationForm(initial={'job_posting': job})
 
     return render(request, 'application/apply_job.html', {'form': form, 'job': job})
 
-
-# ── Application Detail ────────────────────────────────────────────────────────
 
 @login_required(login_url='/application/login/')
 def application_detail(request, pk):
@@ -130,8 +113,6 @@ def application_detail(request, pk):
     })
 
 
-# ── Withdraw Application ──────────────────────────────────────────────────────
-
 @login_required(login_url='/application/login/')
 def withdraw_application(request, pk):
     application = get_object_or_404(Application, pk=pk)
@@ -139,7 +120,7 @@ def withdraw_application(request, pk):
 
     if not applicant or application.applicant != applicant:
         messages.error(request, "Permission denied.")
-        return redirect('application_list')
+        return redirect('application:application_list')
 
     if application.status not in ('accepted', 'rejected'):
         application.status = 'withdrawn'
@@ -148,10 +129,8 @@ def withdraw_application(request, pk):
     else:
         messages.warning(request, "Cannot withdraw a finalised application.")
 
-    return redirect('application_list')
+    return redirect('application:application_list')
 
-
-# ── Update Application Status ─────────────────────────────────────────────────
 
 @login_required(login_url='/application/login/')
 def update_application_status(request, pk):
@@ -162,7 +141,7 @@ def update_application_status(request, pk):
         if form.is_valid():
             form.save()
             messages.success(request, "Application status updated.")
-            return redirect('application_detail', pk=pk)
+            return redirect('application:application_detail', pk=pk)
     else:
         form = ApplicationStatusForm(instance=application)
 
@@ -171,8 +150,6 @@ def update_application_status(request, pk):
         'application': application,
     })
 
-
-# ── Schedule Interview ────────────────────────────────────────────────────────
 
 @login_required(login_url='/application/login/')
 def schedule_interview(request, application_pk):
@@ -185,7 +162,7 @@ def schedule_interview(request, application_pk):
             interview.application = application
             interview.save()
             messages.success(request, "Interview scheduled.")
-            return redirect('application_detail', pk=application_pk)
+            return redirect('application:application_detail', pk=application_pk)
     else:
         form = InterviewForm()
 
@@ -194,8 +171,6 @@ def schedule_interview(request, application_pk):
         'application': application,
     })
 
-
-# ── Edit Interview ────────────────────────────────────────────────────────────
 
 @login_required(login_url='/application/login/')
 def edit_interview(request, pk):
@@ -206,7 +181,7 @@ def edit_interview(request, pk):
         if form.is_valid():
             form.save()
             messages.success(request, "Interview updated.")
-            return redirect('application_detail', pk=interview.application.pk)
+            return redirect('application:application_detail', pk=interview.application.pk)
     else:
         form = InterviewForm(instance=interview)
 
@@ -217,12 +192,10 @@ def edit_interview(request, pk):
     })
 
 
-# ── Delete Interview ──────────────────────────────────────────────────────────
-
 @login_required(login_url='/application/login/')
 def delete_interview(request, pk):
     interview = get_object_or_404(Interview, pk=pk)
     app_pk    = interview.application.pk
     interview.delete()
     messages.success(request, "Interview deleted.")
-    return redirect('application_detail', pk=app_pk)
+    return redirect('application:application_detail', pk=app_pk)
