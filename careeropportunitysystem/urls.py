@@ -5,7 +5,7 @@ from django.conf.urls.static import static
 from django.shortcuts import render
 
 def home(request):
-    return render(request, 'home.html')
+    return render(request, 'careeropportunitysystem/home.html')
 
 urlpatterns = [
     path('admin/',         admin.site.urls),
