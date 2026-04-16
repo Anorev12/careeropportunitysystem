@@ -1,0 +1,58 @@
+{% extends 'application/base.html' %}
+{% block title %}Browse Jobs{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>&#128269; Browse Job Openings</h2>
+        <a href="{% url 'application:application_list' %}" class="btn btn-gray btn-sm">My Applications</a>
+    </div>
+
+    {% if jobs %}
+    <div style="display:grid; gap:16px;">
+        {% for job in jobs %}
+        <div style="background:#f8fafd; border-radius:10px; padding:20px; border-left:4px solid #2d6a9f;">
+            <div style="display:flex; justify-content:space-between; align-items:start; flex-wrap:wrap; gap:10px;">
+                <div>
+                    <h3 style="color:#1a3c5e; margin-bottom:6px;">{{ job.job_title }}</h3>
+                    <p style="color:#666; font-size:0.9rem; margin-bottom:4px;">
+                        &#127970; {{ job.employer.company_name }}
+                    </p>
+                    <p style="color:#666; font-size:0.9rem; margin-bottom:4px;">
+                        &#128205; {{ job.location }}
+                        &nbsp;|&nbsp;
+                        &#128188; {{ job.get_job_type_display }}
+                        {% if job.salary_min and job.salary_max %}
+                        &nbsp;|&nbsp;
+                        &#128176; ₱{{ job.salary_min }} – ₱{{ job.salary_max }}
+                        {% endif %}
+                    </p>
+                    {% if job.deadline %}
+                    <p style="color:#999; font-size:0.82rem;">
+                        &#9200; Deadline: {{ job.deadline }}
+                    </p>
+                    {% endif %}
+                </div>
+                <div style="display:flex; gap:8px; flex-shrink:0;">
+                    <a href="{% url 'application:job_detail' job.pk %}" class="btn btn-blue btn-sm">View Details</a>
+                    <a href="{% url 'application:apply_job' job.pk %}" class="btn btn-green btn-sm">Apply Now</a>
+                </div>
+            </div>
+            {% if job.description %}
+            <p style="margin-top:12px; color:#444; font-size:0.88rem; line-height:1.5;">
+                {{ job.description|truncatewords:30 }}
+            </p>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+
+    {% else %}
+    <div class="empty">
+        <div class="icon">&#128235;</div>
+        <p>No job openings available at the moment.</p>
+        <p style="font-size:0.85rem; margin-top:8px;">Check back later!</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends 'application/base.html' %}
+{% block title %}{{ job.job_title }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>{{ job.job_title }}</h2>
+        <a href="{% url 'application:job_list' %}" class="btn btn-gray btn-sm">&#8592; Back to Jobs</a>
+    </div>
+
+    <div class="detail-grid" style="margin-bottom:20px;">
+        <div class="detail-item">
+            <div class="label">Company</div>
+            <div class="value">{{ job.employer.company_name }}</div>
+        </div>
+        <div class="detail-item">
+            <div class="label">Location</div>
+            <div class="value">{{ job.location }}</div>
+        </div>
+        <div class="detail-item">
+            <div class="label">Job Type</div>
+            <div class="value">{{ job.get_job_type_display }}</div>
+        </div>
+        <div class="detail-item">
+            <div class="label">Category</div>
+            <div class="value">{{ job.category }}</div>
+        </div>
+        {% if job.salary_min or job.salary_max %}
+        <div class="detail-item">
+            <div class="label">Salary</div>
+            <div class="value">
+                {% if job.salary_min and job.salary_max %}
+                    ₱{{ job.salary_min }} – ₱{{ job.salary_max }}
+                {% elif job.salary_min %}
+                    From ₱{{ job.salary_min }}
+                {% else %}
+                    Up to ₱{{ job.salary_max }}
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+        {% if job.deadline %}
+        <div class="detail-item">
+            <div class="label">Deadline</div>
+            <div class="value">{{ job.deadline }}</div>
+        </div>
+        {% endif %}
+    </div>
+
+    <h4 style="color:#1a3c5e; margin-bottom:8px;">Description</h4>
+    <p style="color:#444; line-height:1.6; margin-bottom:20px;">{{ job.description }}</p>
+
+    {% if job.requirements %}
+    <h4 style="color:#1a3c5e; margin-bottom:8px;">Requirements</h4>
+    <p style="color:#444; line-height:1.6; margin-bottom:20px;">{{ job.requirements }}</p>
+    {% endif %}
+
+    <div class="form-actions">
+        {% if already_applied %}
+            <span class="btn btn-gray">&#10003; Already Applied</span>
+        {% else %}
+            <a href="{% url 'application:apply_job' job.pk %}" class="btn btn-green">Apply Now</a>
+        {% endif %}
+        <a href="{% url 'application:job_list' %}" class="btn btn-gray">&#8592; Back to Jobs</a>
+    </div>
+</div>
+{% endblock %}

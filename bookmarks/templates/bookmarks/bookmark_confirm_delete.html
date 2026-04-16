@@ -38,11 +38,11 @@
 <aside class="sidebar">
   <div class="brand">Career<span>OS</span></div>
   <nav>
-    <a href="/accounts/dashboard/">🏠 Dashboard</a>
-    <a href="/accounts/profile/">👤 My Profile</a>
-    <a href="/bookmarks" class="active">🔖 My Bookmarks</a>
+    <a href="/">🏠 Home</a>
+    <a href="/bookmarks/" class="active">🔖 My Bookmarks</a>
+    <a href="/bookmarks/add/">➕ Add Bookmark</a>
     <hr class="divider">
-    <a href="/accounts/logout/" class="danger">🚪 Logout</a>
+    <a href="/bookmarks/logout/" class="danger">🚪 Logout</a>
   </nav>
 </aside>
 
@@ -53,17 +53,4 @@
     <p>You are about to remove this saved job:</p>
     <div class="job-name">
       {{ bookmark.job_title }}
-      {% if bookmark.company_name %}<br><span style="font-weight:400;font-size:.9rem;color:#7a8fa6">{{ bookmark.company_name }}</span>{% endif %}
-    </div>
-    <p style="font-size:.85rem;color:#aab8c8;margin-bottom:28px">This action cannot be undone.</p>
-    <div class="actions">
-      <form method="post">
-        {% csrf_token %}
-        <button type="submit" class="btn-confirm">Yes, Remove</button>
-      </form>
-      <a href="/bookmarks" class="btn-cancel">Cancel</a>
-    </div>
-  </div>
-</main>
-</body>
-</html>
+      {% if bookmark.company_name %}<br><span style="font-weight:400;font-size:.9rem;color:#7a8fa6">{{ bookmark.company_name }}</span>{% en

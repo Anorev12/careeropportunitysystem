@@ -8,7 +8,6 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f4f8; color: #222; min-height: 100vh; }
 
-    /* ── Navbar ── */
     .navbar {
       background: linear-gradient(135deg, #1a3c5e 0%, #2d6a9f 100%);
       padding: 0 2rem;
@@ -28,23 +27,15 @@
     }
     .navbar .nav-links a:hover { color: #fff; }
 
-    /* ── Page wrapper ── */
     .page { max-width: 960px; margin: 2.5rem auto; padding: 0 1.25rem 3rem; }
 
-    /* ── Messages ── */
     .messages { margin-bottom: 1.25rem; }
-    .msg {
-      padding: .75rem 1.1rem;
-      border-radius: 8px;
-      font-size: .9rem;
-      margin-bottom: .5rem;
-    }
+    .msg { padding: .75rem 1.1rem; border-radius: 8px; font-size: .9rem; margin-bottom: .5rem; }
     .msg-success { background: #d4edda; color: #155724; border-left: 4px solid #28a745; }
     .msg-error   { background: #f8d7da; color: #721c24; border-left: 4px solid #dc3545; }
     .msg-warning { background: #fff3cd; color: #856404; border-left: 4px solid #ffc107; }
     .msg-info    { background: #cce5ff; color: #004085; border-left: 4px solid #007bff; }
 
-    /* ── Card ── */
     .card {
       background: #fff;
       border-radius: 12px;
@@ -62,14 +53,7 @@
     }
     .card-header h2 { font-size: 1.2rem; color: #1a3c5e; font-weight: 700; }
 
-    /* ── Badges ── */
-    .badge {
-      display: inline-block;
-      padding: .25rem .7rem;
-      border-radius: 20px;
-      font-size: .78rem;
-      font-weight: 600;
-    }
+    .badge { display: inline-block; padding: .25rem .7rem; border-radius: 20px; font-size: .78rem; font-weight: 600; }
     .badge-pending   { background: #fff3cd; color: #856404; }
     .badge-reviewed  { background: #cce5ff; color: #004085; }
     .badge-accepted  { background: #d4edda; color: #155724; }
@@ -79,14 +63,12 @@
     .badge-failed    { background: #f8d7da; color: #721c24; }
     .badge-no_show   { background: #e2e3e5; color: #383d41; }
 
-    /* ── Table ── */
     table { width: 100%; border-collapse: collapse; font-size: .9rem; }
     th { background: #f0f4f8; color: #1a3c5e; font-weight: 700; padding: .75rem 1rem; text-align: left; }
     td { padding: .75rem 1rem; border-bottom: 1px solid #e9ecef; vertical-align: middle; }
     tr:last-child td { border-bottom: none; }
     tr:hover td { background: #f8fafd; }
 
-    /* ── Buttons ── */
     .btn {
       display: inline-block;
       padding: .5rem 1.1rem;
@@ -108,7 +90,6 @@
     .btn-gray    { background: #6c757d; color: #fff; }
     .btn-sm      { padding: .35rem .8rem; font-size: .8rem; }
 
-    /* ── Form ── */
     .form-group { margin-bottom: 1.1rem; }
     .form-group label { display: block; font-size: .85rem; font-weight: 600; color: #444; margin-bottom: .35rem; }
     .form-group input,
@@ -133,11 +114,9 @@
     }
     .form-actions { display: flex; gap: .75rem; margin-top: 1.5rem; }
 
-    /* ── Empty state ── */
     .empty { text-align: center; padding: 3.5rem 1rem; color: #999; }
     .empty .icon { font-size: 2.5rem; margin-bottom: .75rem; }
 
-    /* ── Detail grid ── */
     .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     .detail-item .label { font-size: .78rem; font-weight: 700; color: #6c757d; text-transform: uppercase; letter-spacing: .4px; margin-bottom: .2rem; }
     .detail-item .value { font-size: .95rem; color: #222; }
@@ -151,11 +130,11 @@
 <body>
 
 <nav class="navbar">
-  <a class="brand" href="{% url 'application:application_list' %}">&#128196; Applications</a>
+  <a class="brand" href="/application/">&#128196; Applications</a>
   <div class="nav-links">
-    <a href="{% url 'employer:employer_index' %}">Jobs</a>
-    <a href="{% url 'application:application_list' %}">My Applications</a>
-    <a href="{% url 'accounts:logout' %}">Logout</a>
+    <a href="/application/jobs/">Jobs</a>
+    <a href="/application/">My Applications</a>
+    <a href="/application/logout/">Logout</a>
   </div>
 </nav>
 

@@ -1,37 +1,37 @@
 from django.db import models
+from accounts.models import User
 
-class Administrator(models.Model):
-    AdminID = models.AutoField(primary_key=True)
-    EmployeeNumber = models.CharField(max_length=50)
-    Department = models.CharField(max_length=100)
-    DateAssigned = models.DateField()
-    PermissionsLevel = models.IntegerField()
-
-    def __str__(self):
-        return self.EmployeeNumber
-
-    class Meta:
-        db_table = 'administrator'
 
 class Notification(models.Model):
-    NotificationID = models.AutoField(primary_key=True)
-    MessageContent = models.TextField()
-    SentDate = models.DateTimeField()
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='notifications'
+    )
+    message_content = models.TextField()
+    sent_date = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"Notification {self.NotificationID}"
+        return f"Notification for {self.user.username} - {self.sent_date}"
 
     class Meta:
-        db_table = 'notification'
+        ordering = ['-sent_date']
+
 
 class AuditLog(models.Model):
-    LogID = models.AutoField(primary_key=True)
-    ActionTaken = models.CharField(max_length=255)
-    EntityAffected = models.CharField(max_length=255)
-    Timestamp = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
+    action_taken = models.CharField(max_length=255)
+    entity_affected = models.CharField(max_length=255)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Log {self.LogID}"
+        return f"{self.action_taken} on {self.entity_affected} at {self.timestamp}"
 
     class Meta:
-        db_table = 'auditlog'
+        ordering = ['-timestamp']
