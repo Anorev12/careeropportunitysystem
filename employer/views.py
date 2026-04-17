@@ -186,5 +186,9 @@ def view_job(request, id):
     if not employer or job.employer != employer:
         messages.error(request, "Permission denied.")
         return redirect('employer:employer_index')
+    applications = job.applications.all() if hasattr(job, 'applications') else []
 
-    return render(request, 'employer/view_job.html', {'job': job})
+    return render(request, 'employer/view_job.html', {
+        'job': job,
+        'applications': applications,
+    })
