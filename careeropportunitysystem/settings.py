@@ -1,3 +1,4 @@
+
 """
 Django settings for notifications project.
 """
@@ -66,7 +67,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'careeropportunitysystem',
         'USER': 'root',
-        'PASSWORD': '@Root123_', # Update this if @Root123_ was the correct one
+        'PASSWORD': 'root123', # Update this if @Root123_ was the correct one
         'HOST': '127.0.0.1',
         'PORT': '3306',
     }
@@ -102,3 +103,5 @@ MEDIA_ROOT = BASE_DIR / 'media'
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/accounts/dashboard/'
 LOGOUT_REDIRECT_URL = '/'
+
+# '@Root123_'
