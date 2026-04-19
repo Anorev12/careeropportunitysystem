@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Notifications</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f4f8; margin: 0; }
+        .navbar { background: #1a3c5e; padding: 1rem 2rem; color: white; display: flex; justify-content: space-between; align-items: center; }
+        .navbar a { color: white; text-decoration: none; margin-left: 1rem; }
+        .container { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+        .card { background: white; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+        .notif-item { padding: 1rem; border-bottom: 1px solid #eee; }
+        .notif-item:last-child { border-bottom: none; }
+        .notif-date { font-size: 12px; color: #999; margin-top: 4px; }
+        .empty { text-align: center; padding: 3rem; color: #999; }
+        .btn { padding: 8px 16px; border-radius: 8px; text-decoration: none; font-size: 14px; background: #1a3c5e; color: white; }
+    </style>
+</head>
+<body>
+<nav class="navbar">
+    <span>🔔 My Notifications</span>
+    <div>
+        <a href="{% url 'notifications:index' %}">Dashboard</a>
+        <a href="{% url 'notifications:logout' %}">Logout</a>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="card">
+        <h2>🔔 Notifications</h2>
+        {% if notifications %}
+            {% for notif in notifications %}
+            <div class="notif-item">
+                <p>{{ notif.message_content }}</p>
+                <div class="notif-date">{{ notif.sent_date }}</div>
+            </div>
+            {% endfor %}
+        {% else %}
+        <div class="empty">
+            <p>No notifications yet.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+</body>
+</html>

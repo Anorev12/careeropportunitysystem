@@ -180,15 +180,10 @@
     {% csrf_token %}
 
     <div class="section-label">Account Information</div>
-    {{ form.email.label_tag }}
-    {{ form.email }}
-    {{ form.email.errors }}
 
-    <br>
-
-    {{ form.fullname.label_tag }}
-    {{ form.fullname }}
-    {{ form.fullname.errors }}
+    {{ form.username.label_tag }}
+    {{ form.username }}
+    {{ form.username.errors }}
 
     <br>
 
@@ -236,7 +231,7 @@
   </form>
 
   <div class="login-link">
-    Already have an account? <a href="{% url 'login' %}">Login here</a>
+    Already have an account? <a href="{% url 'employer:login' %}">Login here</a>
   </div>
 
 </div>

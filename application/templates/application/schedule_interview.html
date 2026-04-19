@@ -1,0 +1,63 @@
+{% extends "application/base.html" %}
+{% block title %}{% if edit_mode %}Edit{% else %}Schedule{% endif %} Interview{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width:580px;margin:0 auto">
+  <div class="card-header">
+    <h2>&#128197; {% if edit_mode %}Edit{% else %}Schedule{% endif %} Interview</h2>
+    <a class="btn btn-gray btn-sm" href="{% url 'application:application_detail' application.pk %}">&#8592; Back</a>
+  </div>
+
+  <div style="background:#f0f4f8;border-radius:8px;padding:.85rem 1.1rem;margin-bottom:1.3rem;font-size:.88rem;color:#555;">
+    <strong>{{ application.applicant.user.fullname }}</strong> &rarr;
+    {{ application.job_posting.JobTitle }} @ {{ application.job_posting.employer.CompanyName }}
+  </div>
+
+  <form method="POST">
+    {% csrf_token %}
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+      <div class="form-group">
+        <label for="id_interview_date">Date &amp; Time</label>
+        <input type="datetime-local" name="interview_date" id="id_interview_date"
+          value="{{ form.interview_date.value|default:'' }}" required />
+      </div>
+      <div class="form-group">
+        <label for="id_interview_type">Interview Type</label>
+        {{ form.interview_type }}
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+      <div class="form-group">
+        <label for="id_interviewer">Interviewer</label>
+        <input type="text" name="interviewer" id="id_interviewer"
+          value="{{ form.interviewer.value|default:'' }}" placeholder="e.g. Maria Santos" />
+      </div>
+      <div class="form-group">
+        <label for="id_location">Location / Link</label>
+        <input type="text" name="location" id="id_location"
+          value="{{ form.location.value|default:'' }}" placeholder="e.g. Zoom, Office Room 3" />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="id_result">Result</label>
+      {{ form.result }}
+    </div>
+
+    <div class="form-group">
+      <label for="id_remarks">Remarks</label>
+      <textarea name="remarks" id="id_remarks" rows="3"
+        placeholder="Additional notes about the interview...">{{ form.remarks.value|default:'' }}</textarea>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-green">
+        {% if edit_mode %}Update Interview{% else %}Schedule Interview{% endif %}
+      </button>
+      <a class="btn btn-gray" href="{% url 'application:application_detail' application.pk %}">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

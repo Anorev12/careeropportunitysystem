@@ -1,12 +1,35 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .models import Bookmark
 from .forms import BookmarkForm
 
 
+# ── Login ──
+def login_view(request):
+    if request.user.is_authenticated:
+        return redirect('/bookmarks/')
+    if request.method == 'POST':
+        username = request.POST.get('username', '').strip()
+        password = request.POST.get('password', '')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('/bookmarks/')
+        else:
+            messages.error(request, 'Invalid username or password.')
+    return render(request, 'bookmarks/login.html')
+
+
+# ── Logout ──
+def logout_view(request):
+    logout(request)
+    return redirect('/bookmarks/login/')
+
+
+# ── Helper ──
 def _get_applicant_or_redirect(request):
-    """Helper: return applicant profile or None if user is not an applicant."""
     if request.user.role != 'applicant':
         messages.error(request, 'Only applicants can manage bookmarks.')
         return None
@@ -17,9 +40,9 @@ def _get_applicant_or_redirect(request):
         return None
 
 
-@login_required
+# ── Bookmark List ──
+@login_required(login_url='/bookmarks/login/')
 def bookmark_list(request):
-    """List all bookmarks for the logged-in applicant."""
     applicant = _get_applicant_or_redirect(request)
     if not applicant:
         return redirect('/accounts/dashboard/')
@@ -30,9 +53,9 @@ def bookmark_list(request):
     })
 
 
-@login_required
+# ── Bookmark Add ──
+@login_required(login_url='/bookmarks/login/')
 def bookmark_add(request):
-    """Add a new bookmark."""
     applicant = _get_applicant_or_redirect(request)
     if not applicant:
         return redirect('/accounts/dashboard/')
@@ -50,9 +73,9 @@ def bookmark_add(request):
     })
 
 
-@login_required
+# ── Bookmark Edit ──
+@login_required(login_url='/bookmarks/login/')
 def bookmark_edit(request, pk):
-    """Edit an existing bookmark."""
     applicant = _get_applicant_or_redirect(request)
     if not applicant:
         return redirect('/accounts/dashboard/')
@@ -69,9 +92,9 @@ def bookmark_edit(request, pk):
     })
 
 
-@login_required
+# ── Bookmark Delete ──
+@login_required(login_url='/bookmarks/login/')
 def bookmark_delete(request, pk):
-    """Delete a bookmark (POST only)."""
     applicant = _get_applicant_or_redirect(request)
     if not applicant:
         return redirect('/accounts/dashboard/')

@@ -6,6 +6,12 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
+      .bottom-link {
+      text-align: center;
+      margin-top: 1.2rem;
+      font-size: 0.88rem;
+      color: #7a8fa6;
+    }
     body {
       font-family: 'Segoe UI', sans-serif;
       background: linear-gradient(135deg, #1a3c5e 0%, #2d6a9f 100%);
@@ -162,9 +168,11 @@
   </form>
 
   <div class="register-link">
-    No account? <a href="{% url 'register' %}">Register here</a>
+    No account? <a href="{% url 'employer:register' %}">Register here</a>
   </div>
-
+  <div class="bottom-link">
+    <a href="/">← Back to Home</a>
+  </div>
 </div>
 
 </body>

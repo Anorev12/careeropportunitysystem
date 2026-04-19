@@ -1,0 +1,52 @@
+{% extends "application/base.html" %}
+{% block title %}My Applications{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header">
+    <h2>&#128196; Job Applications</h2>
+    <a class="btn btn-primary" href="/application/jobs/">&#128269; Browse Jobs</a>
+  </div>
+
+  {% if applications %}
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Job Title</th>
+        <th>Company</th>
+        <th>Applied On</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for app in applications %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td><strong>{{ app.job_posting.job_title }}</strong></td>
+        <td>{{ app.job_posting.employer.company_name }}</td>
+        <td>{{ app.application_date }}</td>
+        <td><span class="badge badge-{{ app.status }}">{{ app.get_status_display }}</span></td>
+        <td>
+          <a class="btn btn-blue btn-sm" href="/application/{{ app.pk }}/">View</a>
+          {% if app.status == 'pending' or app.status == 'reviewed' %}
+            <a class="btn btn-red btn-sm"
+               href="/application/{{ app.pk }}/withdraw/"
+               onclick="return confirm('Withdraw this application?')">Withdraw</a>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% else %}
+  <div class="empty">
+    <div class="icon">&#128196;</div>
+    <p>No applications yet.</p>
+    <a class="btn btn-primary" href="/application/jobs/" style="margin-top:1rem">Browse Jobs</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

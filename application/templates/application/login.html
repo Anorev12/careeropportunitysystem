@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Applications – Sign In | Career Opportunity System</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #0d2137 0%, #1a3c5e 55%, #1e5487 100%);
+    }
+
+    /* ── Card wrapper ── */
+    .auth-card {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 16px 48px rgba(0,0,0,.22);
+      width: 100%;
+      max-width: 440px;
+      padding: 44px 44px 36px;
+    }
+
+    /* ── Branding ── */
+    .brand {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .brand-icon {
+      font-size: 2.4rem;
+      display: block;
+      margin-bottom: 8px;
+    }
+    .brand h1 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #1a3c5e;
+    }
+    .brand p {
+      font-size: .875rem;
+      color: #8a9bb0;
+      margin-top: 4px;
+    }
+
+    /* ── Tab switcher ── */
+    .tabs {
+      display: flex;
+      background: #f0f4f8;
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 28px;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 9px;
+      border: none;
+      background: transparent;
+      border-radius: 7px;
+      font-size: .9rem;
+      font-weight: 600;
+      color: #7a8fa6;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .tab-btn.active {
+      background: #fff;
+      color: #1a3c5e;
+      box-shadow: 0 2px 8px rgba(0,0,0,.1);
+    }
+
+    /* ── Form panels ── */
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* ── Fields ── */
+    .field { margin-bottom: 16px; }
+    .field label {
+      display: block;
+      font-size: .78rem;
+      font-weight: 700;
+      color: #2c3e50;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin-bottom: 6px;
+    }
+    .field input,
+    .field select {
+      width: 100%;
+      padding: 11px 13px;
+      border: 1.5px solid #d8e2ec;
+      border-radius: 8px;
+      font-size: .94rem;
+      color: #1a3550;
+      background: #f8fafc;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+      appearance: none;
+    }
+    .field input:focus,
+    .field select:focus {
+      border-color: #1a3c5e;
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(26,60,94,.1);
+    }
+    .field input.err { border-color: #e74c3c; }
+    .field-error { color: #e74c3c; font-size: .78rem; margin-top: 4px; }
+
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    /* ── Error box ── */
+    .error-box {
+      background: #fff5f5;
+      border: 1px solid #fca5a5;
+      border-radius: 8px;
+      color: #c0392b;
+      font-size: .83rem;
+      padding: 9px 13px;
+      margin-bottom: 16px;
+    }
+
+    /* ── Submit ── */
+    .btn-submit {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      background: #1a3c5e;
+      color: #fff;
+      border: none;
+      border-radius: 9px;
+      font-size: .97rem;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: .02em;
+      margin-top: 6px;
+      transition: background .2s, transform .1s;
+    }
+    .btn-submit:hover  { background: #245080; }
+    .btn-submit:active { transform: scale(.98); }
+
+    /* ── Switch link ── */
+    .switch {
+      text-align: center;
+      font-size: .84rem;
+      color: #8a9bb0;
+      margin-top: 20px;
+    }
+    .switch button {
+      background: none; border: none;
+      color: #1a3c5e; font-weight: 700;
+      cursor: pointer; font-size: .84rem;
+      text-decoration: underline; padding: 0;
+    }
+
+    /* ── Back link ── */
+    .back-link {
+      text-align: center;
+      margin-top: 22px;
+      font-size: .82rem;
+    }
+    .back-link a {
+      color: rgba(255,255,255,.7);
+      text-decoration: none;
+    }
+    .back-link a:hover { color: #fff; text-decoration: underline; }
+
+    @media (max-width: 500px) {
+      .auth-card { padding: 32px 24px 28px; }
+      .row2 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div>
+  <div class="auth-card">
+
+    <!-- Branding -->
+    <div class="brand">
+      <span class="brand-icon">📋</span>
+      <h1>Applications Portal</h1>
+      <p>Career Opportunity System</p>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" id="tab-login"    onclick="switchTab('login')">Sign In</button>
+      <button class="tab-btn"        id="tab-register" onclick="switchTab('register')">Register</button>
+    </div>
+
+    <!-- ── LOGIN PANEL ── -->
+    <div class="panel active" id="panel-login">
+
+      {% if form.non_field_errors %}
+      <div class="error-box">⚠ {{ form.non_field_errors.0 }}</div>
+      {% endif %}
+
+      <form method="post" action="{% url 'application:application_login' %}" novalidate>
+        {% csrf_token %}
+
+        <div class="field">
+          <label for="id_username">Username</label>
+          <input type="text" id="id_username" name="username"
+            placeholder="Enter your username"
+            value="{{ form.username.value|default:'' }}"
+            autocomplete="username"
+            {% if form.username.errors %}class="err"{% endif %} />
+          {% if form.username.errors %}
+          <div class="field-error">{{ form.username.errors.0 }}</div>
+          {% endif %}
+        </div>
+
+        <div class="field">
+          <label for="id_password">Password</label>
+          <input type="password" id="id_password" name="password"
+            placeholder="Enter your password"
+            autocomplete="current-password"
+            {% if form.password.errors %}class="err"{% endif %} />
+          {% if form.password.errors %}
+          <div class="field-error">{{ form.password.errors.0 }}</div>
+          {% endif %}
+        </div>
+
+        <button type="submit" class="btn-submit">Sign In →</button>
+      </form>
+
+      <div class="switch">
+        No account yet? <button onclick="switchTab('register')">Register here</button>
+      </div>
+    </div>
+
+    <!-- ── REGISTER PANEL ── -->
+    <div class="panel" id="panel-register">
+
+      {% if reg_form and reg_form.errors %}
+      <div class="error-box">⚠ Please fix the errors below.</div>
+      {% endif %}
+
+      <form method="post" action="{% url 'application:application_register' %}" novalidate>
+        {% csrf_token %}
+
+        <div class="row2">
+          <div class="field">
+            <label>First Name</label>
+            <input type="text" name="first_name" placeholder="First name"
+              value="{% if reg_form %}{{ reg_form.first_name.value|default:'' }}{% endif %}"
+              {% if reg_form and reg_form.first_name.errors %}class="err"{% endif %} />
+            {% if reg_form and reg_form.first_name.errors %}
+            <div class="field-error">{{ reg_form.first_name.errors.0 }}</div>{% endif %}
+          </div>
+          <div class="field">
+            <label>Last Name</label>
+            <input type="text" name="last_name" placeholder="Last name"
+              value="{% if reg_form %}{{ reg_form.last_name.value|default:'' }}{% endif %}"
+              {% if reg_form and reg_form.last_name.errors %}class="err"{% endif %} />
+            {% if reg_form and reg_form.last_name.errors %}
+            <div class="field-error">{{ reg_form.last_name.errors.0 }}</div>{% endif %}
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Username</label>
+          <input type="text" name="username" placeholder="Choose a username"
+            value="{% if reg_form %}{{ reg_form.username.value|default:'' }}{% endif %}"
+            {% if reg_form and reg_form.username.errors %}class="err"{% endif %} />
+          {% if reg_form and reg_form.username.errors %}
+          <div class="field-error">{{ reg_form.username.errors.0 }}</div>{% endif %}
+        </div>
+
+        <div class="field">
+          <label>Email Address</label>
+          <input type="email" name="email" placeholder="you@email.com"
+            value="{% if reg_form %}{{ reg_form.email.value|default:'' }}{% endif %}"
+            {% if reg_form and reg_form.email.errors %}class="err"{% endif %} />
+          {% if reg_form and reg_form.email.errors %}
+          <div class="field-error">{{ reg_form.email.errors.0 }}</div>{% endif %}
+        </div>
+
+        <div class="field">
+          <label>Phone (optional)</label>
+          <input type="text" name="phone_number" placeholder="+63 9XX XXX XXXX"
+            value="{% if reg_form %}{{ reg_form.phone_number.value|default:'' }}{% endif %}" />
+        </div>
+
+        <!-- Role is fixed to applicant for the Applications portal -->
+        <input type="hidden" name="role" value="applicant" />
+
+        <div class="row2">
+          <div class="field">
+            <label>Password</label>
+            <input type="password" name="password1" placeholder="Min. 8 chars"
+              {% if reg_form and reg_form.password1.errors %}class="err"{% endif %} />
+            {% if reg_form and reg_form.password1.errors %}
+            <div class="field-error">{{ reg_form.password1.errors.0 }}</div>{% endif %}
+          </div>
+          <div class="field">
+            <label>Confirm</label>
+            <input type="password" name="password2" placeholder="Repeat"
+              {% if reg_form and reg_form.password2.errors %}class="err"{% endif %} />
+            {% if reg_form and reg_form.password2.errors %}
+            <div class="field-error">{{ reg_form.password2.errors.0 }}</div>{% endif %}
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit">Create Account →</button>
+      </form>
+
+      <div class="switch">
+        Already have an account? <button onclick="switchTab('login')">Sign in</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Back to home -->
+  <div class="back-link">
+    <a href="/">← Back to Home</a>
+  </div>
+</div>
+
+<script>
+  function switchTab(tab) {
+    document.getElementById('panel-login').classList.toggle('active', tab === 'login');
+    document.getElementById('panel-register').classList.toggle('active', tab === 'register');
+    document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+    document.getElementById('tab-register').classList.toggle('active', tab === 'register');
+  }
+
+  // Auto-open register tab if register form has errors
+  {% if reg_form and reg_form.errors %}
+  switchTab('register');
+  {% endif %}
+</script>
+
+</body>
+</html>
