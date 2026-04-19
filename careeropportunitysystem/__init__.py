@@ -1,3 +1,4 @@
+
 import pymysql
 
 # This tricks Django into thinking the mysqlclient version is 2.2.1

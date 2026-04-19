@@ -12,7 +12,7 @@ class ApplicationForm(forms.ModelForm):
 
 
 class ApplicationStatusForm(forms.ModelForm):
-    """Used by employer/admin to update status & add remarks."""
+    """Used by employer/admin to update status & add remarks!."""
     class Meta:
         model = Application
         fields = ['status', 'remarks']
