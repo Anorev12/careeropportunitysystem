@@ -93,7 +93,7 @@
       <div class="company">
         {% if bm.company_name %}🏢 {{ bm.company_name }}{% else %}🏢 Company not specified{% endif %}
       </div>
-      {% if bm. Notes %}
+      {% if bm.notes %}
       <div class="notes-text">{{ bm.notes }}</div>
       {% endif %}
       <div class="meta">📅 Saved on {{ bm.saved_date|date:"F d, Y" }}</div>
