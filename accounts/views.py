@@ -64,6 +64,33 @@ def register_view(request):
     return render(request, 'accounts/register.html', {'form': form})
 
 
+@login_required(login_url='/accounts/login/')
+def add_user_view(request):
+    """Add a new user record while already logged in — for the Add New Record nav link."""
+    form = RegisterForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        user = form.save(commit=False)
+
+        if not user.username:
+            messages.error(request, 'Username cannot be empty.')
+            return render(request, 'accounts/register.html', {'form': form})
+
+        user.save()
+        form.save_m2m()
+
+        if user.role == 'applicant':
+            Applicant.objects.create(user=user)
+        elif user.role == 'admin':
+            Administrator.objects.create(
+                user=user,
+                employee_number=f'EMP-{user.id:05d}'
+            )
+        messages.success(request, f'New account for "{user.username}" created successfully!')
+        return redirect('accounts:dashboard')
+
+    return render(request, 'accounts/register.html', {'form': form})
+
+
 def logout_view(request):
     logout(request)
     messages.info(request, 'You have been logged out.')

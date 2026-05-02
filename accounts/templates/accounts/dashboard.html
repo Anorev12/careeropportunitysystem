@@ -102,14 +102,15 @@
 <aside class="sidebar">
   <div class="brand">Career<span>OS</span></div>
   <nav>
-    <a href="/accounts/dashboard/" class="active">🏠 Dashboard</a>
-    <a href="/accounts/profile/">👤 My Profile</a>
+    <a href="/accounts/dashboard/" class="active">Dashboard</a>
+    <a href="/accounts/profile/">My Profile</a>
+    <a href="/accounts/addNewUser">Add New Record</a>
     {% if user.role == 'admin' %}
-    <a href="/accounts/users/">👥 Manage Users</a>
-    <a href="/admin/">⚙️ Admin Panel</a>
+    <a href="/accounts/users/">Manage Users</a>
+    <a href="/admin/">Admin Panel</a>
     {% endif %}
     <hr class="divider">
-    <a href="/accounts/logout/" class="danger">🚪 Logout</a>
+    <a href="/accounts/logout/" class="danger">Log Off</a>
   </nav>
 </aside>
 
