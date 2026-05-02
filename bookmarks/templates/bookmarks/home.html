@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Home – Career Opportunity System</title>
+
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f0f4f8;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 230px;
+      min-height: 100vh;
+      background: #1a3550;
+      display: flex;
+      flex-direction: column;
+      padding: 28px 0;
+      flex-shrink: 0;
+    }
+
+    .sidebar .brand {
+      color: #fff;
+      font-size: 1.15rem;
+      font-weight: 700;
+      padding: 0 24px 28px;
+      border-bottom: 1px solid rgba(255,255,255,.1);
+    }
+
+    .sidebar .brand span {
+      color: #f4a623;
+    }
+
+    .sidebar nav {
+      padding: 16px 12px;
+      flex: 1;
+    }
+
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: rgba(255,255,255,.7);
+      text-decoration: none;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: .93rem;
+      margin-bottom: 4px;
+      transition: all .15s;
+    }
+
+    .sidebar nav a:hover,
+    .sidebar nav a.active {
+      background: rgba(255,255,255,.12);
+      color: #fff;
+    }
+
+    .sidebar nav a.danger {
+      color: #ff8a80;
+    }
+
+    .sidebar nav a.danger:hover {
+      background: rgba(255,80,80,.15);
+      color: #ff5252;
+    }
+
+    .sidebar .divider {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,.1);
+      margin: 10px 12px;
+    }
+
+    .main {
+      flex: 1;
+      padding: 36px;
+      overflow-y: auto;
+    }
+
+    .page-header {
+      margin-bottom: 28px;
+    }
+
+    .page-header h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #1a3550;
+    }
+
+    .page-header p {
+      color: #7a8fa6;
+      font-size: .92rem;
+      margin-top: 5px;
+    }
+
+    .alert {
+      padding: 12px 16px;
+      border-radius: 9px;
+      margin-bottom: 18px;
+      font-size: .9rem;
+    }
+
+    .alert-success {
+      background: #e6f9f0;
+      color: #1db370;
+      border: 1px solid #b2ebd4;
+    }
+
+    .alert-error {
+      background: #ffe8e8;
+      color: #e74c3c;
+      border: 1px solid #ffb3b3;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 20px;
+    }
+
+    .dashboard-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 24px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.06);
+      border-left: 4px solid #f4a623;
+      transition: transform .15s, box-shadow .15s;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .dashboard-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,.1);
+    }
+
+    .dashboard-card .icon {
+      font-size: 2rem;
+      margin-bottom: 12px;
+    }
+
+    .dashboard-card h2 {
+      font-size: 1.05rem;
+      color: #1a3550;
+      margin-bottom: 8px;
+    }
+
+    .dashboard-card p {
+      font-size: .88rem;
+      color: #7a8fa6;
+      line-height: 1.5;
+    }
+
+    .welcome-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 26px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.06);
+      margin-bottom: 24px;
+    }
+
+    .welcome-card h2 {
+      color: #1a3550;
+      font-size: 1.25rem;
+      margin-bottom: 6px;
+    }
+
+    .welcome-card p {
+      color: #7a8fa6;
+      font-size: .9rem;
+    }
+  </style>
+</head>
+
+<body>
+
+<aside class="sidebar">
+  <div class="brand">Career<span>OS</span></div>
+
+  <nav>
+    <a href="{% url 'bookmarks:home' %}" class="active">🏠 Home</a>
+    <a href="{% url 'bookmarks:edit_profile' %}">👤 Edit Profile</a>
+    <a href="{% url 'bookmarks:add' %}">➕ Add New Record</a>
+    <a href="{% url 'bookmarks:list' %}">🔖 My Records</a>
+
+    <hr class="divider">
+
+    <a href="{% url 'bookmarks:logout' %}" class="danger">🚪 Log Off</a>
+  </nav>
+</aside>
+
+<main class="main">
+
+  {% for msg in messages %}
+    <div class="alert alert-{{ msg.tags|default:'info' }}">{{ msg }}</div>
+  {% endfor %}
+
+  <div class="page-header">
+    <h1>Home</h1>
+    <p>Welcome back, {{ username }}. Manage your profile and saved job records here.</p>
+  </div>
+
+  <div class="welcome-card">
+    <h2>Career Opportunity System</h2>
+    <p>You are successfully logged in. Use the navigation menu to edit your profile, add a new record, or log off from your account.</p>
+  </div>
+
+  <div class="dashboard-grid">
+
+    <a href="{% url 'bookmarks:edit_profile' %}" class="dashboard-card">
+      <div class="icon">👤</div>
+      <h2>Edit Profile</h2>
+      <p>Update your personal account information such as name and email address.</p>
+    </a>
+
+    <a href="{% url 'bookmarks:add' %}" class="dashboard-card">
+      <div class="icon">➕</div>
+      <h2>Add New Record</h2>
+      <p>Create a new saved job record or bookmark inside your account.</p>
+    </a>
+
+    <a href="{% url 'bookmarks:list' %}" class="dashboard-card">
+      <div class="icon">🔖</div>
+      <h2>View Records</h2>
+      <p>See all job records that you have added or saved in the system.</p>
+    </a>
+
+    <a href="{% url 'bookmarks:logout' %}" class="dashboard-card">
+      <div class="icon">🚪</div>
+      <h2>Log Off</h2>
+      <p>End your current session and return to the login page securely.</p>
+    </a>
+
+  </div>
+
+</main>
+
+</body>
+</html>

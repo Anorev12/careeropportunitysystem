@@ -60,11 +60,14 @@
 <aside class="sidebar">
   <div class="brand">Career<span>OS</span></div>
   <nav>
-    <a href="/">🏠 Home</a>
-    <a href="/bookmarks/" class="active">🔖 My Bookmarks</a>
-    <a href="/bookmarks/add/">➕ Add Bookmark</a>
+    <a href="{% url 'bookmarks:home' %}">🏠 Home</a>
+    <a href="{% url 'bookmarks:edit_profile' %}">👤 Edit Profile</a>
+    <a href="{% url 'bookmarks:add' %}">➕ Add New Record</a>
+    <a href="{% url 'bookmarks:list' %}" class="active">🔖 My Records</a>
+
     <hr class="divider">
-    <a href="/bookmarks/logout/" class="danger">🚪 Logout</a>
+
+    <a href="{% url 'bookmarks:logout' %}" class="danger">🚪 Log Off</a>
   </nav>
 </aside>
 
@@ -90,7 +93,7 @@
       <div class="company">
         {% if bm.company_name %}🏢 {{ bm.company_name }}{% else %}🏢 Company not specified{% endif %}
       </div>
-      {% if bm.notes %}
+      {% if bm. Notes %}
       <div class="notes-text">{{ bm.notes }}</div>
       {% endif %}
       <div class="meta">📅 Saved on {{ bm.saved_date|date:"F d, Y" }}</div>
@@ -112,7 +115,7 @@
   <div class="empty-state">
     <div class="icon">🔖</div>
     <h2>No bookmarks yet</h2>
-    <p>Save jobs you're interested in so you can come back to them later.</p>
+    <p>Save jobs, you're interested in so you can come back to them later.</p>
     <a href="/bookmarks/add/" class="btn-add">＋ Add Your First Bookmark</a>
   </div>
   {% endif %}

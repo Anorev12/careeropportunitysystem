@@ -51,11 +51,14 @@
 <aside class="sidebar">
   <div class="brand">Career<span>OS</span></div>
   <nav>
-    <a href="/">🏠 Home</a>
-    <a href="/bookmarks/">🔖 My Bookmarks</a>
-    <a href="/bookmarks/add/" class="active">➕ Add Bookmark</a>
+    <a href="{% url 'bookmarks:home' %}">🏠 Home</a>
+    <a href="{% url 'bookmarks:edit_profile' %}">👤 Edit Profile</a>
+    <a href="{% url 'bookmarks:add' %}" class="active">➕ Add New Record</a>
+    <a href="{% url 'bookmarks:list' %}">🔖 My Records</a>
+
     <hr class="divider">
-    <a href="/bookmarks/logout/" class="danger">🚪 Logout</a>
+
+    <a href="{% url 'bookmarks:logout' %}" class="danger">🚪 Log Off</a>
   </nav>
 </aside>
 
