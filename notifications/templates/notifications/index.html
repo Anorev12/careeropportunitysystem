@@ -11,6 +11,7 @@
         .badge { background: #dc3545; color: white; border-radius: 50%; padding: 2px 8px; font-size: 12px; }
         .btn { padding: 8px 16px; border-radius: 8px; text-decoration: none; font-size: 14px; }
         .btn-primary { background: #1a3c5e; color: white; }
+        .btn-success { background: #198754; color: white; margin-left: 0.5rem; }
         table { width: 100%; border-collapse: collapse; }
         th { background: #f0f4f8; padding: 10px; text-align: left; }
         td { padding: 10px; border-bottom: 1px solid #eee; }
@@ -34,6 +35,7 @@
         </h2>
         <p>You have <strong>{{ unread_count }}</strong> unread notification(s).</p>
         <a href="{% url 'notifications:notifications' %}" class="btn btn-primary">View Notifications</a>
+        <a href="{% url 'notifications:add_notification' %}" class="btn btn-success">+ Add New Notification</a>
     </div>
 
     <div class="card">
