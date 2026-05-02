@@ -60,13 +60,13 @@ TEMPLATES = [
 WSGI_APPLICATION = 'careeropportunitysystem.wsgi.application'
 
 # Database configuration
-# Note: Ensure you have 'mysqlclient' or 'django-mysql' installed in your .venv
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'careeropportunitysystem',
         'USER': 'root',
-        'PASSWORD': '@Root123_', # Update this if @Root123_ was the correct one
+        'PASSWORD': '@Root123_',
         'HOST': '127.0.0.1',
         'PORT': '3306',
     }
@@ -92,8 +92,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 APPEND_SLASH = True
 
 # Custom user model (accounts app)
-AUTH_USER_MODEL = 'accounts.User'  # ← ask Member 1 what his model class is named
-
+AUTH_USER_MODEL = 'accounts.User' 
 # Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'

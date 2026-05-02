@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Profile</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #1a3c5e 0%, #2d6a9f 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 520px;
+    }
+    .card-header { text-align: center; margin-bottom: 2rem; }
+    .card-header h1 { font-size: 1.6rem; color: #1a3c5e; font-weight: 700; }
+    .card-header p { font-size: 0.9rem; color: #666; margin-top: 0.3rem; }
+    .form-group { margin-bottom: 1.2rem; }
+    .form-group label {
+      display: block; font-size: 0.85rem;
+      font-weight: 600; color: #333; margin-bottom: 0.35rem;
+    }
+    .form-group input,
+    .form-group textarea {
+      width: 100%; padding: 0.65rem 0.9rem;
+      border: 1px solid #ccd6e0; border-radius: 8px;
+      font-size: 0.92rem; color: #222;
+      background: #f7fafd; font-family: inherit;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none; border-color: #2d6a9f;
+      box-shadow: 0 0 0 3px rgba(45,106,159,0.12);
+      background: #fff;
+    }
+    .messages p {
+      background: #e8f5e9; color: #2e7d32;
+      border-left: 4px solid #4CAF50;
+      border-radius: 6px; padding: 0.6rem 1rem;
+      font-size: 0.88rem; margin-bottom: 1rem;
+    }
+    .btn-submit {
+      width: 100%; padding: 0.85rem;
+      background: linear-gradient(135deg, #1a3c5e, #2d6a9f);
+      color: #fff; font-size: 1rem; font-weight: 700;
+      border: none; border-radius: 8px; cursor: pointer;
+      margin-top: 0.5rem; letter-spacing: 0.03em;
+      transition: opacity 0.2s;
+    }
+    .btn-submit:hover { opacity: 0.92; }
+    .back-link {
+      text-align: center; margin-top: 1.2rem;
+      font-size: 0.88rem;
+    }
+    .back-link a { color: #2d6a9f; font-weight: 600; text-decoration: none; }
+    .back-link a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="card-header">
+    <div style="font-size:2.8rem">🏢</div>
+    <h1>Edit Profile</h1>
+    <p>Update your company information.</p>
+  </div>
+
+  {% if messages %}
+    <div class="messages">
+      {% for msg in messages %}<p>{{ msg }}</p>{% endfor %}
+    </div>
+  {% endif %}
+
+  <form method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+      <label>Company Name</label>
+      <input type="text" name="company_name" value="{{ employer.company_name }}" required>
+    </div>
+    <div class="form-group">
+      <label>Company Description</label>
+      <textarea name="company_description" rows="3">{{ employer.company_description }}</textarea>
+    </div>
+    <div class="form-group">
+      <label>Company Address</label>
+      <input type="text" name="company_address" value="{{ employer.company_address }}">
+    </div>
+    <div class="form-group">
+      <label>Contact Email</label>
+      <input type="email" name="contact_email" value="{{ employer.contact_email }}">
+    </div>
+    <div class="form-group">
+      <label>Contact Number</label>
+      <input type="text" name="contact_number" value="{{ employer.contact_number }}">
+    </div>
+    <button type="submit" class="btn-submit">Save Changes</button>
+  </form>
+
+  <div class="back-link">
+    <a href="{% url 'employer:employer_index' %}">← Back to Dashboard</a>
+  </div>
+</div>
+</body>
+</html>

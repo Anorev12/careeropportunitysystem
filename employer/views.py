@@ -76,6 +76,27 @@ def employer_index(request):
     })
 
 
+# ── Edit Profile ──
+@login_required(login_url='/employer/login/')
+def edit_profile(request):
+    employer = get_employer(request)
+    if not employer:
+        messages.error(request, "No employer profile found.")
+        return redirect('employer:employer_index')
+
+    if request.method == 'POST':
+        employer.company_name = request.POST.get('company_name', employer.company_name)
+        employer.company_description = request.POST.get('company_description', employer.company_description)
+        employer.company_address = request.POST.get('company_address', employer.company_address)
+        employer.contact_email = request.POST.get('contact_email', employer.contact_email)
+        employer.contact_number = request.POST.get('contact_number', employer.contact_number)
+        employer.save()
+        messages.success(request, "Profile updated!")
+        return redirect('employer:employer_index')
+
+    return render(request, 'employer/edit_profile.html', {'employer': employer})
+
+
 # ── Post a Job ──
 @login_required(login_url='/employer/login/')
 def create_job(request):
