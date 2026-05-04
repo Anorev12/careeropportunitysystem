@@ -57,3 +57,4 @@ class ApplicantProfileForm(forms.ModelForm):
             'address':             forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'availability_status': forms.Select(attrs={'class': 'form-select'}),
         }
+

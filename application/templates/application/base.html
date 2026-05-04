@@ -130,8 +130,9 @@
 <body>
 
 <nav class="navbar">
-  <a class="brand" href="/application/">&#128196; Applications</a>
+  <a class="brand" href="{% url 'application:application_home' %}">&#128196; Applications</a>
   <div class="nav-links">
+    <a href="{% url 'application:edit_profile' %}">Edit Profile</a>
     <a href="/application/jobs/">Jobs</a>
     <a href="/application/">My Applications</a>
     <a href="/application/logout/">Logout</a>

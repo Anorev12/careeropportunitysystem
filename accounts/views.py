@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import User, Applicant, Administrator
 from .forms import LoginForm, RegisterForm, UserProfileForm, ApplicantProfileForm
+from django.contrib.auth import login, logout, authenticate, update_session_auth_hash
 
 
 # ─────────────────────────────────────────────
@@ -140,3 +141,4 @@ def user_detail(request, pk):
 
     target = get_object_or_404(User, pk=pk)
     return render(request, 'accounts/user_detail.html', {'target': target})
+

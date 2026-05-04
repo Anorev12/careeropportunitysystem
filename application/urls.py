@@ -24,4 +24,7 @@ urlpatterns = [
     path('<int:application_pk>/interview/add/',  views.schedule_interview,        name='schedule_interview'),
     path('interview/<int:pk>/edit/',             views.edit_interview,            name='edit_interview'),
     path('interview/<int:pk>/delete/',           views.delete_interview,          name='delete_interview'),
+
+    path('', views.application_home, name='application_home'),
+    path('edit-profile/', views.edit_profile, name='edit_profile'),
 ]

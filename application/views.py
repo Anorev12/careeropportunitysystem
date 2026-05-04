@@ -20,7 +20,7 @@ def get_applicant(request):
 
 def application_login(request):
     if request.user.is_authenticated:
-        return redirect('application:application_list')
+        return redirect('application:application_home')
 
     from django.contrib.auth.forms import AuthenticationForm
     form = AuthenticationForm(request, data=request.POST or None)
@@ -29,7 +29,7 @@ def application_login(request):
         user = form.get_user()
         login(request, user)
         messages.success(request, f'Welcome back, {user.get_full_name() or user.username}!')
-        return redirect('application:application_list')
+        return redirect('application:application_home')
 
     return render(request, 'application/login.html', {'form': form})
 
@@ -38,7 +38,7 @@ def application_login(request):
 
 def application_register(request):
     if request.user.is_authenticated:
-        return redirect('application:application_list')
+        return redirect('application:application_home')
 
     from accounts.models import Applicant
     from accounts.forms import RegisterForm
@@ -54,7 +54,7 @@ def application_register(request):
         Applicant.objects.create(user=user)
         login(request, user)
         messages.success(request, 'Account created successfully!')
-        return redirect('application:application_list')
+        return redirect('application:application_home')
 
     return render(request, 'application/login.html', {'form': None, 'reg_form': reg_form})
 
@@ -118,11 +118,11 @@ def apply_job(request, job_id):
 
     if not applicant:
         messages.error(request, "Only applicants can apply for jobs.")
-        return redirect('application:application_list')
+        return redirect('application:application_home')
 
     if Application.objects.filter(applicant=applicant, job_posting=job).exists():
         messages.warning(request, "You have already applied for this job.")
-        return redirect('application:application_list')
+        return redirect('application:application_home')
 
     if request.method == 'POST':
         form = ApplicationForm(request.POST)
@@ -132,7 +132,7 @@ def apply_job(request, job_id):
             app.job_posting = job
             app.save()
             messages.success(request, "Application submitted successfully!")
-            return redirect('application:application_list')
+            return redirect('application:application_home')
     else:
         form = ApplicationForm(initial={'job_posting': job})
 
@@ -160,7 +160,7 @@ def withdraw_application(request, pk):
 
     if not applicant or application.applicant != applicant:
         messages.error(request, "Permission denied.")
-        return redirect('application:application_list')
+        return redirect('application:application_home')
 
     if application.status not in ('accepted', 'rejected'):
         application.status = 'withdrawn'
@@ -169,7 +169,7 @@ def withdraw_application(request, pk):
     else:
         messages.warning(request, "Cannot withdraw a finalised application.")
 
-    return redirect('application:application_list')
+    return redirect('application:application_home')
 
 
 # ── Update Application Status ─────────────────────────────────────────────────
@@ -247,3 +247,24 @@ def delete_interview(request, pk):
     interview.delete()
     messages.success(request, "Interview deleted.")
     return redirect('application:application_detail', pk=app_pk)
+
+@login_required(login_url='/application/login/')
+def application_home(request):
+    return render(request, 'application/home.html', {'user': request.user})
+
+
+# ── Edit Profile ──────────────────────────────────────────────────────────────
+
+@login_required(login_url='/application/login/')
+def edit_profile(request):
+    from accounts.models import User
+    if request.method == 'POST':
+        user = request.user
+        user.first_name   = request.POST.get('first_name', user.first_name)
+        user.last_name    = request.POST.get('last_name', user.last_name)
+        user.email        = request.POST.get('email', user.email)
+        user.phone_number = request.POST.get('phone_number', user.phone_number)
+        user.save()
+        messages.success(request, 'Profile updated successfully!')
+        return redirect('application:application_home')
+    return render(request, 'application/edit_profile.html', {'user': request.user})
