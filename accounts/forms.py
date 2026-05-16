@@ -30,6 +30,18 @@ class RegisterForm(UserCreationForm):
             'username': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError('An account with this email already exists.')
+        return email
+
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if User.objects.filter(username=username).exists():
+            raise forms.ValidationError('This username is already taken.')
+        return username
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in ['password1', 'password2']:

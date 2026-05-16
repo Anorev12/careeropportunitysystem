@@ -3,11 +3,6 @@ from django.db import models
 
 
 class User(AbstractUser):
-    """
-    Custom User model — ERD User entity.
-    AbstractUser provides: id, username, first_name, last_name,
-    email, password, is_active, date_joined, last_login.
-    """
     ROLE_CHOICES = [
         ('applicant', 'Applicant'),
         ('employer',  'Employer'),
@@ -18,7 +13,7 @@ class User(AbstractUser):
         ('inactive',  'Inactive'),
         ('suspended', 'Suspended'),
     ]
-
+    email        =models.EmailField(max_length=50, unique=True)
     phone_number = models.CharField(max_length=20, blank=True)
     role         = models.CharField(max_length=20, choices=ROLE_CHOICES, default='applicant')
     status       = models.CharField(max_length=20, choices=STATUS_CHOICES, default='active')
@@ -32,7 +27,7 @@ class User(AbstractUser):
 
 
 class Applicant(models.Model):
-    """ERD Applicant entity: ApplicantID, Address, DateAssigned, ValidID, AvailabilityStatus"""
+
     AVAILABILITY_CHOICES = [
         ('available',     'Available'),
         ('not_available', 'Not Available'),
@@ -54,7 +49,7 @@ class Applicant(models.Model):
 
 
 class Administrator(models.Model):
-    """ERD Administrator entity: AdminID, EmployeeNumber, Department, DateAssigned, PermissionsLevel"""
+
     PERMISSION_CHOICES = [
         ('1', 'Level 1 – View Only'),
         ('2', 'Level 2 – Edit'),

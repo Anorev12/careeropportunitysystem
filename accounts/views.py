@@ -6,19 +6,12 @@ from .models import User, Applicant, Administrator
 from .forms import LoginForm, RegisterForm, UserProfileForm, ApplicantProfileForm
 
 
-# ─────────────────────────────────────────────
-# INDEX / HOME  (127.0.0.1:8080/accounts/)
-# ─────────────────────────────────────────────
+
 def index(request):
-    """Public landing page for Career Opportunity System."""
     return render(request, 'accounts/index.html')
 
-
-# ─────────────────────────────────────────────
-# AUTH
-# ─────────────────────────────────────────────
 def login_view(request):
-    """Login page at /accounts/login/"""
+
     if request.user.is_authenticated:
         return redirect('accounts:dashboard')
 
@@ -66,7 +59,7 @@ def register_view(request):
 
 @login_required(login_url='/accounts/login/')
 def add_user_view(request):
-    """Add a new user record while already logged in — for the Add New Record nav link."""
+
     form = RegisterForm(request.POST or None)
     if request.method == 'POST' and form.is_valid():
         user = form.save(commit=False)
@@ -97,9 +90,7 @@ def logout_view(request):
     return redirect('accounts:login')
 
 
-# ─────────────────────────────────────────────
-# DASHBOARD  (role-aware)
-# ─────────────────────────────────────────────
+
 @login_required(login_url='/accounts/login/')
 def dashboard(request):
     context = {'user': request.user}
@@ -113,9 +104,6 @@ def dashboard(request):
     return render(request, 'accounts/dashboard.html', context)
 
 
-# ─────────────────────────────────────────────
-# PROFILE
-# ─────────────────────────────────────────────
 @login_required(login_url='/accounts/login/')
 def profile_view(request):
     user_form = UserProfileForm(request.POST or None, instance=request.user)
@@ -146,9 +134,6 @@ def profile_view(request):
     })
 
 
-# ─────────────────────────────────────────────
-# ADMIN: User Management
-# ─────────────────────────────────────────────
 @login_required(login_url='/accounts/login/')
 def user_list(request):
     if request.user.role != 'admin':
