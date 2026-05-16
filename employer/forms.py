@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from .models import Employer, JobPosting, JobCategory, JobTitle
 
-User = get_user_model()   # ← gets accounts.User instead of auth.User
+User = get_user_model()   
 
 
 class EmployerRegisterForm(UserCreationForm):
@@ -15,8 +15,8 @@ class EmployerRegisterForm(UserCreationForm):
     contact_number      = forms.CharField(max_length=20, required=False)
 
     class Meta:
-        model  = User                              # ← now points to accounts.User
-        fields = ['username', 'password1', 'password2']   # ← email not username
+        model  = User                            
+        fields = ['username', 'password1', 'password2']   
 
 
 class JobPostingForm(forms.Form):
