@@ -35,6 +35,12 @@ class RegisterForm(UserCreationForm):
         for field in ['password1', 'password2']:
             self.fields[field].widget.attrs['class'] = 'form-control'
 
+            def clean_email(self):
+                email = self.cleaned_data.get('email')
+                if User.objects.filter(email=email).exists():
+                    raise forms.ValidationError("An account with this email already exists.")
+                return email
+
 
 class UserProfileForm(forms.ModelForm):
     class Meta:
