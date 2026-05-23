@@ -23,7 +23,8 @@ def login_view(request):
         else:
             login(request, user)
             messages.success(request, f'Welcome back, {user.fullname}!')
-            return redirect('accounts:dashboard')
+            next_url = request.POST.get('next') or '/accounts/dashboard'
+            return redirect(next_url)
 
     return render(request, 'accounts/login.html', {'form': form})
 

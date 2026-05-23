@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Delete Interview – Career Opportunity System</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f6f9; display: flex; min-height: 100vh; }
+
+    .sidebar { width: 230px; min-height: 100vh; background: #1a3c5e; display: flex; flex-direction: column; padding: 28px 0; flex-shrink: 0; }
+    .sidebar .brand { color: #fff; font-size: 1.1rem; font-weight: 700; padding: 0 24px 28px; border-bottom: 1px solid rgba(255,255,255,.1); }
+    .sidebar .brand span { color: #f4a623; }
+    .sidebar nav { padding: 16px 12px; flex: 1; }
+    .sidebar nav a { display: block; color: rgba(255,255,255,.75); text-decoration: none; padding: 10px 14px; border-radius: 8px; font-size: .92rem; margin-bottom: 4px; transition: all .15s; }
+    .sidebar nav a:hover { background: rgba(255,255,255,.12); color: #fff; }
+    .sidebar .divider { border: none; border-top: 1px solid rgba(255,255,255,.1); margin: 12px; }
+
+    .main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 36px; }
+
+    .confirm-card {
+      background: #fff; border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,.08);
+      padding: 40px; width: 100%; max-width: 460px; text-align: center;
+    }
+    .confirm-card h1 { font-size: 1.3rem; font-weight: 700; color: #1a3c5e; margin-bottom: 12px; }
+    .confirm-card p { color: #7a8fa6; font-size: .93rem; margin-bottom: 8px; }
+
+    .detail-box { background: #f7fafc; border-radius: 9px; padding: 14px 18px; margin: 18px 0 24px; text-align: left; }
+    .detail-row { display: flex; justify-content: space-between; font-size: .9rem; padding: 6px 0; border-bottom: 1px solid #f0f4f8; }
+    .detail-row:last-child { border-bottom: none; }
+    .detail-row .lbl { color: #7a8fa6; }
+    .detail-row .val { color: #1a3c5e; font-weight: 600; }
+
+    .warning { font-size: .85rem; color: #e74c3c; margin-bottom: 24px; }
+
+    .actions { display: flex; gap: 12px; justify-content: center; }
+    .btn-confirm { padding: 12px 32px; background: #e74c3c; color: #fff; border: none; border-radius: 9px; font-size: .97rem; font-weight: 600; cursor: pointer; font-family: inherit; }
+    .btn-confirm:hover { background: #c0392b; }
+    .btn-cancel { padding: 12px 32px; background: #f0f4f8; color: #1a3c5e; border-radius: 9px; text-decoration: none; font-size: .97rem; font-weight: 600; }
+    .btn-cancel:hover { background: #dce8f0; }
+  </style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="brand">Career<span>OS</span></div>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/interview/">Interview Records</a>
+    <a href="/interview/addNewInterview">Add New Record</a>
+    <hr class="divider">
+    <a href="/interview/logout/">Log Off</a>
+  </nav>
+</aside>
+
+<main class="main">
+  <div class="confirm-card">
+    <h1>Delete Interview Record?</h1>
+    <p>You are about to permanently delete this record:</p>
+
+    <div class="detail-box">
+      <div class="detail-row">
+        <span class="lbl">Applicant</span>
+        <span class="val">{{ interview.applicant_name }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="lbl">Date</span>
+        <span class="val">{{ interview.interview_date|date:"F d, Y" }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="lbl">Type</span>
+        <span class="val">{{ interview.get_interview_type_display }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="lbl">Interviewer</span>
+        <span class="val">{{ interview.interviewer }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="lbl">Result</span>
+        <span class="val">{{ interview.get_result_display }}</span>
+      </div>
+    </div>
+
+    <p class="warning">This action cannot be undone.</p>
+
+    <div class="actions">
+      <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn-confirm">Yes, Delete</button>
+      </form>
+      <a href="/interview/" class="btn-cancel">Cancel</a>
+    </div>
+  </div>
+</main>
+</body>
+</html>

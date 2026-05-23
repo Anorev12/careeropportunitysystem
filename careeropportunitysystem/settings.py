@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'employer',
     'notifications',
     'bookmarks',
+    'interview',
 ]
 
 MIDDLEWARE = [
@@ -100,5 +101,5 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default login URL
 LOGIN_URL = '/accounts/login/'
-LOGIN_REDIRECT_URL = '/accounts/dashboard/'
+LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'

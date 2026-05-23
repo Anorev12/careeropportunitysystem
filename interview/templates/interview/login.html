@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login – Interview | Career Opportunity System</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #dce8f0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 8px 32px rgba(30,60,90,.13);
+      padding: 48px 48px 36px;
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .card-header { text-align: center; margin-bottom: 28px; }
+    .card-header .icon { font-size: 2.4rem; margin-bottom: 12px; }
+    .card-header h1 { font-size: 1.4rem; font-weight: 700; color: #1a3c5e; margin-bottom: 6px; }
+    .card-header p  { font-size: .88rem; color: #8a9bb0; }
+
+    .error-box {
+      background: #fff0f0; border: 1.5px solid #ffb3b3;
+      border-radius: 9px; color: #c0392b; font-size: .88rem;
+      padding: 11px 14px; margin-bottom: 18px;
+    }
+
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: .85rem; font-weight: 600; color: #2c3e50; margin-bottom: 6px; }
+    .form-control {
+      width: 100%; padding: 12px 15px;
+      border: 1.5px solid #d0dce8; border-radius: 9px;
+      font-size: .95rem; color: #1a3c5e; background: #f7fafd;
+      outline: none; font-family: inherit;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .form-control:focus { border-color: #1a3c5e; box-shadow: 0 0 0 3px rgba(26,60,94,.1); background: #fff; }
+    .form-control.is-error { border-color: #e74c3c; }
+
+    .btn-submit {
+      display: block; width: 100%; padding: 13px;
+      background: #1a3c5e; color: #fff; border: none;
+      border-radius: 9px; font-size: 1rem; font-weight: 600;
+      cursor: pointer; margin-top: 8px; font-family: inherit;
+      transition: background .15s;
+    }
+    .btn-submit:hover { background: #24496e; }
+
+    .divider { border: none; border-top: 1px solid #e8eef4; margin: 22px 0 18px; }
+    .footer-text { text-align: center; font-size: .85rem; color: #8a9bb0; }
+    .footer-text a { color: #1a3c5e; font-weight: 600; text-decoration: none; }
+    .footer-text a:hover { text-decoration: underline; }
+    .copyright { text-align: center; font-size: .8rem; color: #b0bec8; margin-top: 16px; }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <div class="card-header">
+    <div class="icon">🗓️</div>
+    <h1>Interview Module</h1>
+    <p>Sign in to manage interview records</p>
+  </div>
+
+  {% if error %}
+  <div class="error-box">{{ error }}</div>
+  {% endif %}
+
+  <form method="post" action="/interview/login/" novalidate>
+    {% csrf_token %}
+
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input
+        type="text"
+        id="username"
+        name="username"
+        class="form-control {% if error %}is-error{% endif %}"
+        placeholder="Enter your username"
+        value="{{ request.POST.username|default:'' }}"
+        autocomplete="username"
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        class="form-control {% if error %}is-error{% endif %}"
+        placeholder="Enter your password"
+        autocomplete="current-password"
+      >
+    </div>
+
+    <button type="submit" class="btn-submit">Sign In</button>
+  </form>
+
+  <hr class="divider">
+  <p class="footer-text">
+    No account yet? <a href="/interview/register/">Register here</a>
+  </p>
+  <p class="copyright">Career Opportunity System &copy; 2025</p>
+</div>
+
+</body>
+</html>

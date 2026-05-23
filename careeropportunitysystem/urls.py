@@ -14,9 +14,11 @@ urlpatterns = [
     path('',               home,                         name='home'),
     path('accounts/',      include('accounts.urls')),
     path('employer/',      include('employer.urls', namespace='employer')),
+    path('interview/',     include('interview.urls',     namespace='interview')),
     path('application/',   include('application.urls')),
     path('bookmarks/',     include('bookmarks.urls')),
     path('notifications/', include('notifications.urls')),
+
 ]
 
 if settings.DEBUG:
