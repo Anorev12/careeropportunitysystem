@@ -11,14 +11,10 @@ INTERVIEW_LOGIN_URL = '/interview/login/'
 def interview_login(request):
     if request.user.is_authenticated:
         return redirect('/interview/')
-
-    form  = InterviewLoginForm(request.POST or None)
     error = None
-
     if request.method == 'POST':
         username = request.POST.get('username', '').strip()
         password = request.POST.get('password', '')
-
         if not username or not password:
             error = 'Please enter both username and password.'
         else:
@@ -28,21 +24,18 @@ def interview_login(request):
             else:
                 login(request, user)
                 return redirect('/interview/')
-
-    return render(request, 'interview/login.html', {'form': form, 'error': error})
+    return render(request, 'interview/login.html', {'error': error})
 
 
 def interview_register(request):
     if request.user.is_authenticated:
         return redirect('/interview/')
-
     form = InterviewRegisterForm(request.POST or None)
     if request.method == 'POST' and form.is_valid():
         user = form.save()
         login(request, user)
         messages.success(request, 'Account created. Welcome!')
         return redirect('/interview/')
-
     return render(request, 'interview/register.html', {'form': form})
 
 
@@ -53,7 +46,9 @@ def interview_logout(request):
 
 @login_required(login_url=INTERVIEW_LOGIN_URL)
 def index(request):
-    interviews = Interview.objects.filter(created_by=request.user)
+    interviews = Interview.objects.filter(
+        created_by=request.user
+    ).select_related('applicant__user')
     return render(request, 'interview/index.html', {'interviews': interviews})
 
 
@@ -62,16 +57,13 @@ def add_interview(request):
     form = InterviewForm(request.POST or None)
     if request.method == 'POST' and form.is_valid():
         interview = form.save(commit=False)
-        interview.created_by = request.user  # link to current user
+        interview.created_by = request.user
         interview.save()
         messages.success(request, 'Interview record added successfully.')
         return redirect('/interview/')
     return render(request, 'interview/addNewInterview.html', {'form': form})
 
 
-# ─────────────────────────────────────────────
-# EDIT — only owner can edit
-# ─────────────────────────────────────────────
 @login_required(login_url=INTERVIEW_LOGIN_URL)
 def edit_interview(request, pk):
     interview = get_object_or_404(Interview, pk=pk, created_by=request.user)
@@ -87,9 +79,6 @@ def edit_interview(request, pk):
     })
 
 
-# ─────────────────────────────────────────────
-# DELETE — only owner can delete
-# ─────────────────────────────────────────────
 @login_required(login_url=INTERVIEW_LOGIN_URL)
 def delete_interview(request, pk):
     interview = get_object_or_404(Interview, pk=pk, created_by=request.user)

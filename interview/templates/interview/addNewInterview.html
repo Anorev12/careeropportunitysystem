@@ -107,10 +107,10 @@
       {% csrf_token %}
 
       <div class="form-group">
-        <label>Applicant Name <span class="req">*</span></label>
-        {{ form.applicant_name }}
-        {% if form.applicant_name.errors %}
-          <div class="field-error">{{ form.applicant_name.errors.0 }}</div>
+        <label>Applicant <span class="req">*</span></label>
+        {{ form.applicant }}
+        {% if form.applicant.errors %}
+          <div class="field-error">{{ form.applicant.errors.0 }}</div>
         {% endif %}
       </div>
 

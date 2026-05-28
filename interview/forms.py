@@ -1,11 +1,12 @@
 from django import forms
 from django.contrib.auth import get_user_model
+from accounts.models import Applicant
 from .models import Interview
 
 User = get_user_model()
 
 
-# ── LOGIN ──────────────────────────────────────────────────────────────────
+# LOGIN
 class InterviewLoginForm(forms.Form):
     username = forms.CharField(
         widget=forms.TextInput(attrs={
@@ -21,7 +22,7 @@ class InterviewLoginForm(forms.Form):
     )
 
 
-# ── REGISTER ───────────────────────────────────────────────────────────────
+# REGISTER 
 class InterviewRegisterForm(forms.ModelForm):
     password1 = forms.CharField(
         label='Password',
@@ -77,13 +78,13 @@ class InterviewRegisterForm(forms.ModelForm):
         return user
 
 
-# ── INTERVIEW RECORD ────────────────────────────────────────────────────────
+# INTERVIEW RECORD
 class InterviewForm(forms.ModelForm):
 
     class Meta:
         model  = Interview
         fields = [
-            'applicant_name',
+            'applicant',
             'interview_date',
             'interview_type',
             'interviewer',
@@ -92,10 +93,7 @@ class InterviewForm(forms.ModelForm):
             'remarks',
         ]
         widgets = {
-            'applicant_name': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Full name of applicant',
-            }),
+            'applicant':      forms.Select(attrs={'class': 'form-control'}),
             'interview_date': forms.DateInput(attrs={
                 'class': 'form-control',
                 'type': 'date',
@@ -117,28 +115,41 @@ class InterviewForm(forms.ModelForm):
             }),
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['applicant'].queryset = (
+            Applicant.objects.select_related('user').all()
+        )
+        self.fields['applicant'].label_from_instance = lambda obj: (
+            obj.user.get_full_name() or obj.user.username
+        )
+        self.fields['applicant'].empty_label = '-- Select Applicant --'
+
     def clean(self):
         cleaned_data   = super().clean()
-        applicant_name = cleaned_data.get('applicant_name')
+        applicant      = cleaned_data.get('applicant')
         interview_date = cleaned_data.get('interview_date')
         interview_type = cleaned_data.get('interview_type')
         interviewer    = cleaned_data.get('interviewer')
 
-        if applicant_name and interview_date and interview_type and interviewer:
+        if applicant and interview_date and interview_type and interviewer:
             qs = Interview.objects.filter(
-                applicant_name=applicant_name,
+                applicant=applicant,
                 interview_date=interview_date,
                 interview_type=interview_type,
                 interviewer=interviewer,
             )
-            # Exclude the current record when editing
             if self.instance and self.instance.pk:
                 qs = qs.exclude(pk=self.instance.pk)
 
             if qs.exists():
+                name = (
+                    applicant.user.get_full_name()
+                    or applicant.user.username
+                )
                 raise forms.ValidationError(
                     f'A {dict(Interview.INTERVIEW_TYPE_CHOICES).get(interview_type)} '
-                    f'for "{applicant_name}" with interviewer "{interviewer}" '
+                    f'for "{name}" with interviewer "{interviewer}" '
                     f'on {interview_date} already exists.'
                 )
 
